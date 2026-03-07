@@ -9,5 +9,8 @@ import './stimulus_bootstrap.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 registerVueControllerComponents(require.context('./vue/controllers', true, /\.vue$/));
