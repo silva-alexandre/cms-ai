@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div
+    {{ vue_component('Login', {
+        csrfToken: csrf_token('authenticate')
+    }) }}>
+</div>
+
+{% endblock %}
