@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+    <div {{ vue_component('NovoOrcamento', {
+        title: 'Detalhes do Orçamento',
+        subtitle: 'Ajuste os valores abaixo para atualizar o orçamento formal.',
+        services: servicos|map(s => { id: s.id, nome: s.nome, preco: s.preco }),
+        isEmbedded: true,
+        initialData: {
+            titulo: form.titulo.vars.value,
+            qtd: form.qtd.vars.value,
+            valor_total: form.valor_total.vars.value,
+            id_servico: form.id_servico.vars.value
+        },
+        fieldNames: {
+            titulo: form.titulo.vars.full_name,
+            quantity: form.qtd.vars.full_name,
+            totalValue: form.valor_total.vars.full_name,
+            selectedServiceId: form.id_servico.vars.full_name
+        }
+    }) }}></div>
+
+    <div style="display: none;">
+        {{ form_widget(form._token) }}
+        {{ form_widget(form.data) }}
+    </div>
+
+    <div class="mt-4 pb-5">
+        <button type="submit" class="btn-main-gold w-100 py-3" style="border: none;">
+            {{ button_label|default('Salvar Orçamento') }}
+        </button>
+    </div>
+{{ form_end(form, {render_rest: false}) }}
