@@ -17,21 +17,21 @@
         <div class="col-lg-7">
           <div class="glass-card animate-on-scroll">
             <span class="offer-badge mb-3">
-              <i class="bi bi-fire me-1"></i> Promoção Especial
+              <i class="bi bi-fire me-1"></i> Consulte nossos serviços
             </span>
 
             <h1 class="display-4 fw-800 mb-4 text-crema">
-              {{ hero.title || 'Transformando Ambientes com Perfeição' }}
+              {{ hero.title || 'Cores que inspiram e resultados que impressionam' }}
             </h1>
 
             <p class="lead mb-4 text-salvia">
-              A cada pincelada, uma nova história de elegância e proteção para o seu patrimônio.
-              <strong class="text-white">Agende sua pintura este mês e ganhe 10% de desconto.</strong>
+              Transformamos ambientes com cores vibrantes e acabamento impecável.
+              <strong class="text-white">Simule o valor do seu orçamento agora!</strong>
             </p>
 
             <div class="d-flex gap-3 flex-wrap">
               <a href="#simulador" class="btn-main btn-lg">
-                <i class="bi bi-whatsapp me-2"></i> Solicitar Orçamento
+                <i class="bi bi-whatsapp me-2"></i> Simular Orçamento
               </a>
               <a href="#features" class="btn-outline-crema btn-lg">
                 Ver Portfólio
