@@ -1,40 +1,106 @@
 :root {
-    --primary-color: #2950bc;
-    --primary-dark: #1e3a8a;
-    --primary-light: #6ac4ff;
-    --text-light: #ffffff;
-    --text-muted: #acbad1;
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --gradient-start: #1a1a2e;
-    --gradient-end: #16213e;
-    --card-hover-border: rgba(106, 196, 255, 0.5);
-}
-
-/* ✅ Reset básico */
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    width: 100%;
+    --verde-floresta: #284B3B;
+    --crema-suave: #F2E8CF;
+    --bronze-antigo: #B08D57;
+    --verde-salvia: #A8B5A8;
+    --cinza-quente: #8E8577;
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--text-light);
-    background-color: var(--gradient-end); /* Fallback */
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f8f9fa;
+    color: #333;
+}
+
+/* Utilitários baseados na nova marca */
+.bg-verde-floresta {
+    background-color: var(--verde-floresta);
+}
+
+.text-crema {
+    color: var(--crema-suave);
+}
+
+.text-bronze {
+    color: var(--bronze-antigo);
+}
+
+/* Transições suaves */
+.transition-3 {
+    transition: .3s;
+}
+
+/* Estilo de Vidro (Glass) */
+.glass-card {
+    background: rgba(255, 255, 255, .06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, .15);
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .35);
+}
+
+/* Botões da Marca */
+.btn-main {
+    background: var(--bronze-antigo);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: .2s;
+    text-decoration: none;
+    display: inline-block;
 }
 
 /* Responsividade Global */
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
     body {
-        font-size: 15px; /* Ligeira redução no tamanho base da fonte */
+        font-size: 15px;
+    }
+
+    .section-title {
+        font-size: 2rem !important;
+    }
+
+    .btn-main,
+    .btn-outline-crema {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
     }
 }
 
-/* ✅ Bootstrap CSS via CDN ou import */
-@import 'bootstrap/dist/css/bootstrap.min.css';
+.btn-main:hover {
+    background: #c19b62;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-outline-crema {
+    border: 2px solid var(--crema-suave);
+    color: var(--crema-suave);
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: .2s;
+}
+
+.btn-outline-crema:hover {
+    background: var(--crema-suave);
+    color: var(--verde-floresta);
+}
+
+/* Badge de Oferta */
+.offer-badge {
+    background: var(--bronze-antigo);
+    color: white;
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: .9rem;
+    display: inline-block;
+}

@@ -4,7 +4,9 @@
 
 <div
     {{ vue_component('Login', {
-        csrfToken: csrf_token('authenticate')
+        csrfToken: csrf_token('authenticate'),
+        lastUsername: last_username,
+        error: error ? error.messageKey|trans(error.messageData, 'security') : null
     }) }}>
 </div>
 

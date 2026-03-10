@@ -1,53 +1,63 @@
 <template>
-  <!-- Skip link para acessibilidade -->
-  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="container">
-      <div class="hero-header">
-        <div></div>
-        <a href="#" class="logo" aria-label="Página inicial">
-          Sua<span>Marca</span>
-        </a>
-      </div>
-      
-      <div class="glass-panel hero-content animate-on-scroll" ref="heroContent">
-        <h1>{{ hero.title }}</h1>
-        <p>{{ hero.subtitle }}</p>
-        
-        <form class="cta-form" @submit.prevent="handleContactSubmit">
-          <label for="email-hero" class="visually-hidden">Seu e-mail</label>
-          <input 
-            type="email" 
-            id="email-hero" 
-            class="form-control" 
-            v-model="formData.email"
-            placeholder="seu@email.com" 
-            required 
-            aria-required="true"
-            :disabled="isSubmitting"
-          >
-          <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-            {{ isSubmitting ? 'Enviando...' : 'Solicitar contato' }}
-          </button>
-        </form>
-        <div v-if="formMessage" :class="['form-feedback', formMessage.type]">
-          {{ formMessage.text }}
+  <div class="hero">
+    <!-- Background Slider -->
+    <div class="hero-bg-container">
+      <div 
+        v-for="(img, index) in heroImages" 
+        :key="index"
+        class="hero-slide"
+        :class="{ 'active': currentSlide === index }"
+        :style="{ backgroundImage: `url(${img})` }"
+      ></div>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="container overflow-hidden position-relative" style="z-index: 5;">
+      <div class="row align-items-center mb-5">
+        <div class="col-lg-7">
+          <div class="glass-card animate-on-scroll">
+            <span class="offer-badge mb-3">
+              <i class="bi bi-fire me-1"></i> Promoção Especial
+            </span>
+
+            <h1 class="display-4 fw-800 mb-4 text-crema">
+              {{ hero.title || 'Transformando Ambientes com Perfeição' }}
+            </h1>
+
+            <p class="lead mb-4 text-salvia">
+              A cada pincelada, uma nova história de elegância e proteção para o seu patrimônio.
+              <strong class="text-white">Agende sua pintura este mês e ganhe 10% de desconto.</strong>
+            </p>
+
+            <div class="d-flex gap-3 flex-wrap">
+              <a href="#simulador" class="btn-main btn-lg">
+                <i class="bi bi-whatsapp me-2"></i> Solicitar Orçamento
+              </a>
+              <a href="#features" class="btn-outline-crema btn-lg">
+                Ver Portfólio
+              </a>
+            </div>
+
+            <div class="hero-rating mt-4">
+              <div class="stars mb-2">
+                <i class="bi bi-star-fill text-warning" v-for="i in 5" :key="i"></i>
+              </div>
+              <small class="text-salvia opacity-75">4.9/5 em mais de 200 avaliações reais</small>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </header>
+  </div>
 
-  <!-- Conteúdo Principal -->
   <main id="main-content">
-    
     <!-- Seção de Recursos -->
-    <section id="features" class="section">
+    <section id="features" class="section py-5" style="background: #fdfaf3;">
       <div class="container">
-        <div class="row justify-content-center text-center mb-5">
+        <div class="row justify-content-center text-center mb-5 mt-4">
           <div class="col-lg-8">
-            <h2 class="section-title">{{ features.title }}</h2>
-            <p class="section-subtitle">{{ features.subtitle }}</p>
+            <h2 class="section-title text-verde">{{ features.title }}</h2>
+            <p class="section-subtitle mx-auto">{{ features.subtitle }}</p>
           </div>
         </div>
         
@@ -59,883 +69,618 @@
           >
             <div 
               class="feature-card animate-on-scroll" 
-              :style="{ animationDelay: `${index * 0.1}s` }"
-              @mouseenter="onFeatureHover(index)"
-              @mouseleave="onFeatureLeave(index)"
+              :style="{ 
+                animationDelay: `${index * 0.1}s`,
+                backgroundImage: `url(${feature.image || 'https://images.unsplash.com/photo-1562664377-709f2c337eb2?auto=format&fit=crop&w=600&q=80'})`
+              }"
             >
-              <div class="feature-icon">{{ feature.icon }}</div>
-              <h5>{{ feature.title }}</h5>
-              <p>{{ feature.description }}</p>
+              <div class="feature-content-wrapper">
+                <div class="feature-icon-small mb-2">{{ feature.icon }}</div>
+                <h5 class="fw-bold text-white mb-2">{{ feature.title }}</h5>
+                <p class="feature-description small mb-0">{{ feature.description }}</p>
+              </div>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Seção Sobre -->
-    <section id="about" class="section" :style="{ background: 'rgba(30, 30, 50, 0.5)' }">
-      <div class="container">
-        <div class="row align-items-center g-5">
-          <div class="col-lg-6">
-            <h2 class="section-title">{{ about.title }}</h2>
-            <p class="text-muted mb-4">{{ about.description1 }}</p>
-            <p class="text-muted">{{ about.description2 }}</p>
-            <a href="#contact" class="btn btn-primary mt-4" @click.prevent="scrollToContact">
-              {{ about.ctaText }}
-            </a>
-          </div>
-          <div class="col-lg-6">
-            <div class="glass-panel about-visual">
-              <slot name="about-visual">
-                <p class="text-muted mb-0">{{ about.imagePlaceholder }}</p>
-              </slot>
-            </div>
-          </div>
-        </div>
+    <!-- Seção Sobre (Glass Card Simplificado) -->
+    <section id="about" class="about-section position-relative overflow-hidden">
+      <!-- Background Overlay -->
+      <div class="about-bg-container">
+        <div class="about-bg-image"></div>
+        <div class="about-overlay"></div>
       </div>
-    </section>
-
-    <!-- Seção de Contato -->
-    <section id="contact" class="section" ref="contactSection">
-      <div class="container">
+      
+      <div class="container py-5 position-relative" style="z-index: 5;">
         <div class="row justify-content-center">
-          <div class="col-lg-8 text-center">
-            <h2 class="section-title">{{ contact.title }}</h2>
-            <p class="section-subtitle mx-auto">{{ contact.subtitle }}</p>
-            
-            <form 
-              class="cta-form mx-auto" 
-              style="max-width: 500px;" 
-              @submit.prevent="handleContactSubmit"
-            >
-              <label for="email-contact" class="visually-hidden">Seu e-mail</label>
-              <input 
-                type="email" 
-                id="email-contact" 
-                class="form-control" 
-                v-model="formData.email"
-                placeholder="seu@email.com" 
-                required
-                :disabled="isSubmitting"
-              >
-              <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-                {{ isSubmitting ? 'Enviando...' : 'Solicitar contato' }}
-              </button>
-            </form>
-            <div v-if="formMessage" :class="['form-feedback', formMessage.type, 'mt-3']">
-              {{ formMessage.text }}
+          <div class="col-lg-10">
+            <div class="glass-card-main animate-on-scroll">
+              <div class="text-center mb-5">
+                <span class="badge-premium mb-3">Nossa História</span>
+                <h2 class="display-4 fw-800 text-crema mb-4">{{ about.title }}</h2>
+                <div class="divider-gold mx-auto mb-4"></div>
+              </div>
+
+              <div class="row g-4 align-items-center">
+                <div class="col-lg-7">
+                  <div class="about-text-content pe-lg-4">
+                    <p class="lead text-crema opacity-90 mb-4 fw-500">{{ about.description1 }}</p>
+                    <p class="text-salvia mb-5">{{ about.description2 }}</p>
+                    
+                    <div class="d-flex flex-wrap gap-4 mb-5">
+                      <div class="stat-pill">
+                        <span class="stat-number">12+</span>
+                        <span class="stat-label text-salvia">Anos de Experiência</span>
+                      </div>
+                      <div class="stat-pill">
+                        <span class="stat-number">800+</span>
+                        <span class="stat-label text-salvia">Obras Entregues</span>
+                      </div>
+                      <div class="stat-pill">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label text-salvia">Satisfação</span>
+                      </div>
+                    </div>
+
+                    <a href="#contact" class="btn-main-gold">
+                      {{ about.ctaText }}
+                      <i class="bi bi-whatsapp ms-2"></i>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="col-lg-5">
+                  <div class="floating-values-card glass-card">
+                    <ul class="list-unstyled mb-0">
+                      <li class="mb-3 d-flex align-items-center gap-3">
+                        <div class="icon-box-small"><i class="bi bi-star-fill"></i></div>
+                        <div>
+                          <h6 class="mb-0 text-crema">Qualidade Premium</h6>
+                          <small class="text-salvia">Foco total no acabamento</small>
+                        </div>
+                      </li>
+                      <li class="mb-3 d-flex align-items-center gap-3">
+                        <div class="icon-box-small"><i class="bi bi-clock-fill"></i></div>
+                        <div>
+                          <h6 class="mb-0 text-crema">Pontualidade</h6>
+                          <small class="text-salvia">Prazos rigorosamente respeitados</small>
+                        </div>
+                      </li>
+                      <li class="d-flex align-items-center gap-3">
+                        <div class="icon-box-small"><i class="bi bi-shield-check"></i></div>
+                        <div>
+                          <h6 class="mb-0 text-crema">Garantia Real</h6>
+                          <small class="text-salvia">Sua tranquilidade garantida</small>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <NovoOrcamento id="simulador" :csrf-token="csrfToken" />
   </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container text-center">
-      <p>&copy; {{ currentYear }} {{ footer.companyName }}. Todos os direitos reservados.</p>
-      <p class="mt-2">
-        <a v-for="(link, index) in footer.links" :key="index" :href="link.href" class="text-decoration-none footer-link">
-          {{ link.label }}
-        </a>
-      </p>
-    </div>
-  </footer>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
+import NovoOrcamento from './NovoOrcamento.vue'
 
-// === Props recebidas do Twig ===
 const props = defineProps({
-  hero: {
-    type: Object,
-    default: () => ({
-      title: 'Soluções inteligentes para o seu negócio digital',
-      subtitle: 'Transforme ideias em experiências excepcionais com tecnologia de ponta e design centrado no usuário.'
-    })
-  },
+  csrfToken: { type: String, default: '' },
+  hero: { type: Object, default: () => ({}) },
   features: {
     type: Object,
     default: () => ({
-      title: 'Por que nos escolher?',
-      subtitle: 'Combinamos inovação tecnológica com práticas modernas de UX para entregar resultados excepcionais.',
+      title: 'Excelência em cada detalhe',
+      subtitle: 'Trabalhamos com os melhores materiais e técnicas para um acabamento impecável.',
       items: [
-        {
-          icon: '✨',
-          title: 'Design Moderno',
-          description: 'Interfaces minimalistas e tecnológicas que seguem as melhores práticas de UX e acessibilidade.'
-        },
-        {
-          icon: '🚀',
-          title: 'Performance Otimizada',
-          description: 'Código limpo e carregamento rápido para uma experiência fluida em qualquer dispositivo.'
-        },
-        {
-          icon: '🔒',
-          title: 'Segurança & Confiabilidade',
-          description: 'Arquitetura robusta com foco em proteção de dados e estabilidade para seu negócio.'
-        }
+        { icon: '🎨', title: 'Consultoria de Cores', description: 'Ajudamos você a escolher a paleta perfeita para o seu ambiente.', image: 'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=800&q=80' },
+        { icon: '🏠', title: 'Pintura Residencial', description: 'Transformamos lares com profissionalismo e limpeza.', image: 'https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?auto=format&fit=crop&w=800&q=80' },
+        { icon: '🏢', title: 'Comercial & Industrial', description: 'Projetos de grande escala com agilidade e durabilidade.', image: 'https://images.unsplash.com/photo-1562664377-709f2c337eb2?auto=format&fit=crop&w=800&q=80' }
       ]
     })
   },
   about: {
     type: Object,
     default: () => ({
-      title: 'Sobre nossa abordagem',
-      description1: 'Trabalhamos com foco em resultados, utilizando metodologias ágeis e feedback contínuo para garantir que cada projeto supere expectativas.',
-      description2: 'Nossa equipe especializada em desenvolvimento web, design de interface e estratégia digital está pronta para transformar sua visão em realidade.',
-      ctaText: 'Conheça nosso time',
-      imagePlaceholder: '[Área para imagem/ilustração futurista com elementos de IA e fluxos de dados]'
+      title: 'Sua obra em boas mãos',
+      description1: 'A GR Pintura nasceu da paixão pelo acabamento perfeito. Com anos de experiência no mercado, somos referência em qualidade e confiança.',
+      description2: 'Nossa equipe é treinada para entregar não apenas cor, mas proteção e renovação para o seu patrimônio, sempre respeitando prazos e orçamento.',
+      ctaText: 'Solicitar via WhatsApp',
+      imagePlaceholder: '[Foco em Qualidade e Acabamento Premium]'
     })
   },
-  contact: {
-    type: Object,
-    default: () => ({
-      title: 'Pronto para começar?',
-      subtitle: 'Deixe seu e-mail e entraremos em contato para entender como podemos ajudar seu projeto a decolar.'
-    })
-  },
-  footer: {
-    type: Object,
-    default: () => ({
-      companyName: 'SuaMarca',
-      links: [
-        { label: 'Política de Privacidade', href: '#' },
-        { label: 'Termos de Uso', href: '#' }
-      ]
-    })
-  },
-  apiEndpoint: {
-    type: String,
-    default: '/api/contact'
-  }
 })
-
-// === Emits para comunicação com Twig/Stimulus ===
-const emit = defineEmits(['contact-submitted', 'nav-click', 'feature-hover'])
 
 // === Estado Reativo ===
-const isScrolled = ref(false)
-const isMobileMenuOpen = ref(false)
-const isSubmitting = ref(false)
-const formMessage = ref(null)
-const currentYear = ref(new Date().getFullYear())
-
-const formData = reactive({
-  email: ''
-})
-
-const navItems = reactive([
-  { label: 'Início', href: '#', active: true, target: 'hero' },
-  { label: 'Recursos', href: '#features', active: false, target: 'features' },
-  { label: 'Sobre', href: '#about', active: false, target: 'about' },
-  { label: 'Contato', href: '#contact', active: false, target: 'contact' }
-])
-
-// Refs para elementos do DOM
-const heroContent = ref(null)
-const contactSection = ref(null)
 const observer = ref(null)
+const scrollY = ref(0)
+
+const heroImages = [
+  '/04-gr-text-proj.jpg',
+  '/4.jpg',
+  '/5.jpg',
+  '/text-background.png'
+]
+const currentSlide = ref(0)
+const slideInterval = ref(null)
 
 // === Métodos ===
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
-  
-  // Atualizar item ativo da navbar baseado no scroll
-  updateActiveNavItem()
+const updateScroll = () => {
+  scrollY.value = window.scrollY
 }
 
-const updateActiveNavItem = () => {
-  const sections = ['hero', 'features', 'about', 'contact']
-  const scrollPosition = window.scrollY + 150 // offset para navbar
-  
-  sections.forEach(sectionId => {
-    const section = document.getElementById(sectionId)
-    if (section) {
-      const sectionTop = section.offsetTop
-      const sectionHeight = section.offsetHeight
-      
-      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-        navItems.forEach(item => {
-          item.active = item.target === sectionId
-        })
-      }
-    }
-  })
+const nextSlide = () => {
+  currentSlide.value = (currentSlide.value + 1) % heroImages.length
 }
 
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
-}
 
-const handleNavClick = (item) => {
-  emit('nav-click', item)
-  
-  if (item.target === 'hero') {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  } else {
-    const target = document.getElementById(item.target)
-    if (target) {
-      const headerOffset = 80
-      const elementPosition = target.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
-    }
-  }
-  
-  // Fechar menu mobile após clique
-  if (window.innerWidth < 992) {
-    isMobileMenuOpen.value = false
-  }
-}
-
-const scrollToContact = () => {
-  emit('nav-click', { target: 'contact' })
-  
-  if (contactSection.value) {
-    const headerOffset = 80
-    const elementPosition = contactSection.value.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    })
-  }
-}
-
-const handleContactSubmit = async () => {
-  if (!formData.email) {
-    showFormMessage('Por favor, informe um e-mail válido.', 'error')
-    return
-  }
-  
-  isSubmitting.value = true
-  formMessage.value = null
-  
-  try {
-    // Simulação de chamada API - substitua pela chamada real
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // Exemplo de chamada real:
-    // const response = await fetch(props.apiEndpoint, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email: formData.email })
-    // })
-    // if (!response.ok) throw new Error('Erro ao enviar')
-    
-    showFormMessage('Obrigado! Entraremos em contato em breve.', 'success')
-    formData.email = ''
-    
-    // Emitir evento para Twig/Stimulus
-    emit('contact-submitted', { email: formData.email, success: true })
-    
-  } catch (error) {
-    showFormMessage('Ocorreu um erro ao enviar. Tente novamente.', 'error')
-    emit('contact-submitted', { email: formData.email, success: false, error: error.message })
-  } finally {
-    isSubmitting.value = false
-  }
-}
-
-const showFormMessage = (text, type) => {
-  formMessage.value = { text, type }
-  setTimeout(() => {
-    formMessage.value = null
-  }, 5000)
-}
-
-const onFeatureHover = (index) => {
-  emit('feature-hover', { index, hovered: true })
-}
-
-const onFeatureLeave = (index) => {
-  emit('feature-hover', { index, hovered: false })
-}
 
 const initScrollAnimations = () => {
-  // Observer para animações de entrada ao scroll
   observer.value = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = '1'
-        entry.target.style.transform = 'translateY(0)'
+        entry.target.classList.add('fade-in-up')
         observer.value?.unobserve(entry.target)
       }
     })
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  })
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' })
 
-  // Aplicar observer nos elementos com classe animate-on-scroll
   nextTick(() => {
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-      el.style.opacity = '0'
-      el.style.transform = 'translateY(20px)'
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
-      observer.value?.observe(el)
-    })
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.value?.observe(el))
   })
 }
 
-const cleanupAnimations = () => {
-  if (observer.value) {
-    observer.value.disconnect()
-  }
-}
-
-// === Ciclo de Vida ===
 onMounted(() => {
-  // Listener de scroll
-  window.addEventListener('scroll', handleScroll, { passive: true })
-  
-  // Inicializar animações
   initScrollAnimations()
-  
-  // Inicializar estado da navbar
-  handleScroll()
-  
-  // Inicializar Bootstrap Collapse se necessário
-  import('bootstrap').then(({ Collapse }) => {
-    const navbarCollapse = document.getElementById('navbarNav')
-    if (navbarCollapse && !navbarCollapse.classList.contains('initialized')) {
-      new Collapse(navbarCollapse, { toggle: false })
-      navbarCollapse.classList.add('initialized')
-    }
-  }).catch(() => {
-    // Bootstrap não disponível, usar fallback manual
-  })
+  window.addEventListener('scroll', updateScroll)
+  slideInterval.value = setInterval(nextSlide, 6000)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-  cleanupAnimations()
+  if (slideInterval.value) clearInterval(slideInterval.value)
+  window.removeEventListener('scroll', updateScroll)
 })
 </script>
 
 <style scoped>
-:root {
-  --primary-color: #2950bc;
-  --primary-dark: #1e3a8a;
-  --primary-light: #6ac4ff;
-  --text-light: #ffffff;
-  --text-muted: #acbad1;
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --gradient-start: #1a1a2e;
-  --gradient-end: #16213e;
-  --card-hover-border: rgba(106, 196, 255, 0.5);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-:host {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: var(--text-light);
-  line-height: 1.6;
-  overflow-x: hidden;
-  display: block;
-  min-height: 100vh;
-}
-
-/* === Utilitários de Acessibilidade === */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: var(--primary-color);
-  color: white;
-  padding: 0.5rem 1rem;
-  z-index: 100;
-  transition: top 0.3s;
-  text-decoration: none;
-  border-radius: 0 0 8px 0;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* === Hero Section com Glassmorphism === */
 .hero {
-  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: 
-    linear-gradient(135deg, rgba(41, 80, 188, 0.9), rgba(26, 26, 46, 0.95)),
-    url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
-  padding: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  background-color: #1f3b2f;
 }
 
-.hero::before {
-  content: '';
+.hero-bg-container {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at top, rgba(106, 196, 255, 0.15), transparent 70%);
-  pointer-events: none;
+  z-index: 1;
 }
 
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 2.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 1.5s ease-in-out;
+  opacity: 0;
 }
 
-/* Logo posicionado à direita */
-.hero-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
-}
-
-.logo {
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--text-light);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: opacity 0.2s ease;
-}
-
-.logo:hover {
-  opacity: 0.9;
-}
-
-.logo span {
-  color: var(--primary-light);
-}
-
-/* CTA à esquerda */
-.hero-content {
-  max-width: 600px;
-}
-
-.hero h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(to right, #fff, var(--text-muted));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero p {
-  color: var(--text-muted);
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
-  max-width: 500px;
-}
-
-/* Formulário de captura */
-.cta-form {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.cta-form .form-control {
-  flex: 1;
-  min-width: 200px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid var(--glass-border);
-  color: var(--text-light);
-  padding: 0.875rem 1.25rem;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-
-.cta-form .form-control::placeholder {
-  color: var(--text-muted);
+.hero-slide.active {
   opacity: 1;
 }
 
-.cta-form .form-control:focus {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: var(--primary-light);
-  box-shadow: 0 0 0 3px rgba(106, 196, 255, 0.2);
-  outline: none;
-  color: var(--text-light);
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(135deg, rgba(40, 75, 59, 0.3) 0%, rgba(27, 51, 40, 0.7) 25%, rgba(27, 51, 40, 0.3) 50%),
+    radial-gradient(circle at 20% 80%, rgba(176, 140, 87, 0.2), transparent 75%);
+  z-index: 2;
 }
 
-.cta-form .form-control:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.glass-card {
+  background: rgba(40, 75, 59, 0.034);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(176, 141, 87, 0.25);
+  border-radius: 18px;
+  padding: 45px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 2;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  border: none;
-  padding: 0.875rem 2rem;
-  border-radius: 10px;
-  font-weight: 600;
+.fw-800 { font-weight: 800; }
+.text-crema { color: #F2E8CF; }
+.text-salvia { color: #A8B5A8; }
+.text-verde { color: #284B3B; }
+.bg-verde-floresta { background: #284B3B; }
+
+.offer-badge {
+  background: #B08D57;
   color: white;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(41, 80, 188, 0.4);
-  cursor: pointer;
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(41, 80, 188, 0.6);
-  background: linear-gradient(135deg, var(--primary-dark), #162e7a);
-  color: white;
-}
-
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.btn-primary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Feedback do formulário */
-.form-feedback {
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  animation: fadeIn 0.3s ease;
-}
-
-.form-feedback.success {
-  background: rgba(46, 204, 113, 0.2);
-  border: 1px solid rgba(46, 204, 113, 0.4);
-  color: #2ecc71;
-}
-
-.form-feedback.error {
-  background: rgba(231, 76, 60, 0.2);
-  border: 1px solid rgba(231, 76, 60, 0.4);
-  color: #e74c3c;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* === Navbar moderna === */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1030;
-  padding: 1rem 0;
-  transition: all 0.3s ease;
-  background: transparent;
-}
-
-.navbar.scrolled {
-  background: rgba(22, 33, 62, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 0.75rem 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.navbar-brand {
-  font-weight: 700;
-  color: var(--text-light) !important;
-  font-size: 1.25rem;
-}
-
-.navbar-brand span {
-  color: var(--primary-light);
-}
-
-:deep(.navbar-dark .navbar-nav .nav-link) {
-  color: var(--text-muted);
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  transition: color 0.2s ease;
-}
-
-:deep(.navbar-dark .navbar-nav .nav-link:hover),
-:deep(.navbar-dark .navbar-nav .nav-link.active) {
-  color: var(--text-light);
-}
-
-:deep(.navbar-collapse) {
-  transition: none;
-}
-
-:deep(.navbar-collapse.show) {
-  display: block;
-}
-
-@media (max-width: 991px) {
-  :deep(.navbar-collapse:not(.show)) {
-    display: none;
-  }
-}
-
-/* === Seções de conteúdo === */
-.section {
-  padding: 5rem 0;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--text-light);
-}
-
-.section-subtitle {
-  color: var(--text-muted);
-  font-size: 1.1rem;
-  margin-bottom: 3rem;
-  max-width: 600px;
-}
-
-/* === Cards com efeito glass === */
-.feature-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 2rem;
-  height: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  cursor: default;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  border-color: var(--card-hover-border);
-}
-
-.feature-icon {
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.25rem;
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.feature-card h5 {
-  color: var(--text-light);
+  padding: 6px 18px;
+  border-radius: 30px;
   font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.feature-card p {
-  color: var(--text-muted);
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-/* Visual da seção Sobre */
-.about-visual {
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-/* === Footer === */
-.footer {
-  background: rgba(15, 15, 30, 0.95);
-  border-top: 1px solid var(--glass-border);
-  padding: 3rem 0 1.5rem;
-  margin-top: 4rem;
-}
-
-.footer p {
-  color: var(--text-muted);
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-.footer-link {
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.2s ease;
-  margin: 0 0.5rem;
+  font-size: .9rem;
   display: inline-block;
 }
 
-.footer-link:hover {
-  color: var(--primary-light);
+.btn-main {
+  background: #B08D57;
+  color: white;
+  border: none;
+  padding: 15px 36px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: .2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.footer-link:not(:last-child)::after {
-  content: '•';
-  margin-left: 0.5rem;
-  color: var(--glass-border);
+.btn-main:hover {
+  background: #c19b62;
+  transform: translateY(-2px);
+  color: white;
 }
 
-/* === Responsividade === */
+.btn-outline-crema {
+  border: 2px solid #F2E8CF;
+  color: #F2E8CF;
+  padding: 15px 36px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-outline-crema:hover {
+  background: #F2E8CF;
+  color: #284B3B;
+}
+
+.feature-card {
+  position: relative;
+  height: 350px;
+  border-radius: 24px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: none;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+.feature-content-wrapper {
+  position: relative;
+  z-index: 2;
+  padding: 25px;
+  background: #1b3328; /* Fundo opaco escuro combinando com o tema */
+  border-top: 1px solid rgba(176, 141, 87, 0.3);
+  transform: translateY(0);
+  transition: all 0.4s ease;
+}
+
+.feature-description {
+  color: #A8B5A8;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+.feature-card:hover .feature-content-wrapper {
+  background: #234234;
+}
+
+.feature-icon-small {
+  font-size: 1.5rem;
+  background: #B08D57;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin-top: -45px; /* Offset to make it float halfway out of the opaque block */
+  position: relative;
+  z-index: 3;
+  margin-left: 0;
+  border: 2px solid #1b3328;
+}
+
+.section-title {
+  font-weight: 800;
+  font-size: 2.5rem;
+}
+
+.section-subtitle {
+  color: #8E8577;
+  font-size: 1.1rem;
+  max-width: 600px;
+}
+
+.grayscale { filter: grayscale(1); opacity: 0.5; }
+
+/* Animações */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.8s ease-out;
+}
+
+.fade-in-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (max-width: 768px) {
   .hero {
-    padding: 6rem 0 3rem; /* Espaço para navbar fixa */
-  }
-
-  .hero-header {
-    flex-direction: column;
-    gap: 1rem;
+    min-height: auto;
+    padding-top: 140px;
+    padding-bottom: 80px;
     text-align: center;
-    margin-bottom: 2rem;
   }
   
-  .hero-header > div:first-child {
-    display: none;
+  .glass-card { 
+    padding: 24px 18px; 
+    border-radius: 16px;
+    margin: 0 auto;
+    max-width: 92%;
+  }
+  
+  .display-4 {
+    font-size: 2rem !important;
+    line-height: 1.2;
+    margin-bottom: 0.75rem !important;
   }
 
-  .hero h1 {
-    font-size: 2.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+  .offer-badge {
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    margin-bottom: 12px;
   }
   
-  .cta-form {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .cta-form .form-control,
-  .cta-form .btn-primary {
-    width: 100%;
-    padding: 0.75rem 1.25rem;
-  }
-  
-  .section {
-    padding: 3.5rem 0;
-  }
-  
-  .section-title {
-    font-size: 1.75rem;
-    margin-bottom: 0.75rem;
+  .section-title { 
+    font-size: 1.8rem; 
   }
 
   .section-subtitle {
     font-size: 1rem;
     margin-bottom: 2rem;
   }
-  
+
+  .lead {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .btn-main, .btn-outline-crema, .btn-main-gold { 
+    width: 100%; 
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    justify-content: center;
+  }
+
+  .cta-form .input-group {
+    flex-direction: column;
+    gap: 10px;
+    background: transparent !important;
+  }
+
+  .cta-form .form-control {
+    border-radius: 12px !important;
+    width: 100%;
+  }
+
+  .cta-form .btn-main {
+    border-radius: 12px !important;
+    width: 100%;
+  }
+
+  /* Responsividade Features */
   .feature-card {
+    height: 300px;
+  }
+
+  .feature-content-wrapper {
+    padding: 20px;
+  }
+
+  .feature-icon-small {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    margin-top: -38px;
+  }
+
+  /* Responsividade About */
+  .about-section {
+    padding: 60px 0;
+  }
+
+  .glass-card-main {
+    padding: 30px 20px;
+    border-radius: 24px;
+  }
+
+  .stat-pill {
+    flex: 1 1 120px;
     text-align: center;
-    padding: 1.5rem;
-  }
-  
-  .feature-icon {
-    margin-left: auto;
-    margin-right: auto;
   }
 
-  .about-visual {
-    min-height: 200px;
-    margin-top: 2rem;
+  .stat-number {
+    font-size: 1.6rem;
   }
 
-  .footer {
-    padding: 2.5rem 0 1rem;
-    text-align: center;
-  }
-
-  .footer-link {
-    display: block;
-    margin: 0.5rem 0;
-  }
-
-  .footer-link:not(:last-child)::after {
-    display: none;
+  .divider-gold {
+    width: 50px;
   }
 }
 
-@media (max-width: 480px) {
-  .hero {
-    padding: 1rem 0;
-  }
-  
-  .glass-panel {
-    padding: 1.5rem;
-  }
-  
-  .hero h1 {
-    font-size: 1.75rem;
-  }
-  
-  .hero p {
-    font-size: 1rem;
-  }
+/* Nova Seção Sobre Simplificada */
+.about-section {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 0;
+  background: #1b3328;
 }
 
-/* === Animações de entrada === */
-.animate-on-scroll {
-  will-change: transform, opacity;
+.about-bg-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
-/* === Utilitários de texto === */
-.text-muted {
-  color: var(--text-muted) !important;
+.about-bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1589939705384-5185138a04b9?auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.5) brightness(0.6);
 }
 
-/* === Links === */
-a {
-  color: inherit;
+.about-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(27, 51, 40, 0.95) 0%, rgba(27, 51, 40, 0.7) 100%);
+}
+
+.glass-card-main {
+  background: rgba(40, 75, 59, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(176, 141, 87, 0.3);
+  border-radius: 40px;
+  padding: 60px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+}
+
+.badge-premium {
+  background: rgba(176, 141, 87, 0.15);
+  color: #B08D57;
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(176, 141, 87, 0.3);
+  display: inline-block;
+}
+
+.divider-gold {
+  width: 80px;
+  height: 4px;
+  background: #B08D57;
+  border-radius: 2px;
+}
+
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #B08D57;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-main-gold {
+  background: #B08D57;
+  color: white;
+  border: none;
+  padding: 18px 45px;
+  border-radius: 12px;
+  font-weight: 700;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(176, 141, 87, 0.3);
 }
 
-a:hover {
-  text-decoration: none;
+.btn-main-gold:hover {
+  background: #c19b62;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(176, 141, 87, 0.4);
+  color: white;
 }
 
-/* === Foco visível para acessibilidade === */
-:focus-visible {
-  outline: 2px solid var(--primary-light);
-  outline-offset: 2px;
+.icon-box-small {
+  width: 40px;
+  height: 40px;
+  background: rgba(176, 141, 87, 0.1);
+  border: 1px solid rgba(176, 141, 87, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B08D57;
 }
 
-/* === Transições suaves para scroll === */
-html {
-  scroll-behavior: smooth;
+.floating-values-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 30px !important;
 }
+
+.opacity-90 { opacity: 0.9; }
+
+@media (max-width: 991px) {
+  .glass-card-main {
+    padding: 40px 30px;
+    border-radius: 30px;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+}
+
+
+
 </style>

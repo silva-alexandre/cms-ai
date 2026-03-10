@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Página não encontrada - GR Pintura{% endblock %}
+
+{% block body %}
+<section class="error-section d-flex align-items-center justify-content-center" style="min-height: 80vh; background: #1b3328;">
+    <div class="container text-center">
+        <div class="glass-card-main animate-on-scroll p-5 mx-auto" style="max-width: 600px;">
+            <div class="error-badge mb-4" style="background: rgba(176, 141, 87, 0.1); color: #B08D57; padding: 10px 20px; border-radius: 50px; display: inline-block; font-weight: 700; letter-spacing: 2px;">
+                CÓDIGO 404
+            </div>
+            
+            <h1 class="display-3 fw-800 text-crema mb-3">Ops! Caminho perdido.</h1>
+            <div class="divider-gold mx-auto mb-4" style="width: 80px; height: 4px; background: #B08D57; border-radius: 2px;"></div>
+            
+            <p class="lead text-salvia mb-5 opacity-90">
+                A página que você está procurando parece ter sido pintada com uma cor invisível ou simplesmente não existe mais.
+            </p>
+            
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                <a href="{{ path('app_home') }}" class="btn-main-gold px-5 py-3">
+                    <i class="bi bi-house-door me-2"></i> Voltar para Home
+                </a>
+                <a href="https://wa.me/55" class="btn-outline-crema px-5 py-3">
+                    Suporte via WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.fw-800 { font-weight: 800; }
+.text-crema { color: #F2E8CF; }
+.text-salvia { color: #A8B5A8; }
+.glass-card-main {
+    background: rgba(40, 75, 59, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(176, 141, 87, 0.3);
+    border-radius: 40px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+}
+.btn-main-gold {
+    background: #B08D57;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.btn-main-gold:hover {
+    background: #c19b62;
+    transform: translateY(-3px);
+    color: white;
+}
+.btn-outline-crema {
+    border: 2px solid #F2E8CF;
+    color: #F2E8CF;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.btn-outline-crema:hover {
+    background: #F2E8CF;
+    color: #284B3B;
+}
+</style>
+{% endblock %}
