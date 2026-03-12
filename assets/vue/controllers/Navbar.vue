@@ -1,10 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" :class="{ 'scrolled': isScrolled }">
-    <div class="container">
+    <div class="container position-relative d-flex align-items-center">
       <a class="navbar-brand" href="/">
-        <img src="https://gr-pintura.com.br/gr-pintura-logo.png" alt="GR Pintura Logo" class="brand-img">
+        <img src="/gr-pintura-logo.png" alt="GR Pintura Logo" class="brand-img">
+        <span class="brand-text">GR Pinturas</span>
       </a>
-
       <button 
         class="navbar-toggler" 
         type="button" 
@@ -19,13 +19,16 @@
       <div class="collapse navbar-collapse justify-content-end" :class="{ 'show': isMobileMenuOpen }" id="menu">
         <ul class="navbar-nav align-items-center">
           <li class="nav-item">
-            <a class="nav-link" href="#features">Serviços</a>
+            <a class="nav-link" href="/#features">Serviços</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#about">Sobre</a>
+            <a class="nav-link" href="/#about">Sobre</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#contact">Contato</a>
+            <a class="nav-link" href="/galeria">Galeria</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#contact">Contato</a>
           </li>
 
           <!-- Itens autenticados -->
@@ -103,14 +106,20 @@ onUnmounted(() => {
   padding: 12px 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
+.navbar-brand {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  margin-right: auto; /* Aligns to left in flex container */
+}
 
 .brand-img {
-  height: 70px;
+  height: 100px;
   transition: .3s;
 }
 
 .navbar-custom.scrolled .brand-img {
-  height: 50px;
+  height: 55px;
 }
 
 .navbar-nav .nav-link {
@@ -165,7 +174,7 @@ onUnmounted(() => {
   }
 
   .brand-img {
-    height: 48px;
+    height: 75px;
   }
 
   .navbar-nav {
@@ -194,7 +203,7 @@ onUnmounted(() => {
   }
   
   .brand-img {
-    height: 40px;
+    height: 85px;
   }
 }
 </style>

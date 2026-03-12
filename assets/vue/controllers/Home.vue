@@ -21,11 +21,11 @@
             </span>
 
             <h1 class="display-4 fw-800 mb-4 text-crema">
-              {{ hero.title || 'Transformando Ambientes com Perfeição' }}
+              {{ hero.title || 'Cores que inspiram, resultados que impresionam' }}
             </h1>
 
             <p class="lead mb-4 text-salvia">
-              A cada pincelada, uma nova história de elegância e proteção para o seu patrimônio.
+              Renove a sensação de se sentir bem em seu lar, garantimos elegância e proteção para o seu patrimônio.
               <strong class="text-white">Agende sua pintura este mês e ganhe 10% de desconto.</strong>
             </p>
 

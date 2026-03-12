@@ -37,4 +37,10 @@ final class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
+
+    #[Route('/galeria', name: 'app_gallery')]
+    public function gallery(): Response
+    {
+        return $this->render('home/gallery.html.twig');
+    }
 }

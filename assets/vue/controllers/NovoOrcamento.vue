@@ -329,7 +329,7 @@ const handleSubmit = async () => {
     }
 
     const message = `Olá, gostaria de um orçamento para ${selectedService.value.nome} com área de ${quantity.value}m². Total estimado: ${formatCurrency(totalValue.value)}`
-    window.open(`https://wa.me/55?text=${encodeURIComponent(message)}`, '_blank')
+    window.open(`https://wa.me/5511948780179?text=${encodeURIComponent(message)}`, '_blank')
   }
 }
 
