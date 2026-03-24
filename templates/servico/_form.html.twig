@@ -1,4 +1,31 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+
+<div {{ vue_component('NovoServico', {
+    fieldNames: {
+        nome: form.nome.vars.full_name,
+        preco: form.preco.vars.full_name,
+        detalhe: form.detalhe.vars.full_name,
+        foto: form.foto.vars.full_name
+    },
+    initialData: {
+        nome: form.nome.vars.value,
+        preco: form.preco.vars.value,
+        detalhe: form.detalhe.vars.value,
+        fotosExistentes: form.vars.value.foto|default([])
+    }
+}) }}></div>
+
+<div style="display: none;">
+    {{ form_widget(form._token) }}
+</div>
+
+<div class="mt-4 pb-5 d-flex gap-3 justify-content-end">
+    <a href="{{ path('app_servico_index') }}" class="btn btn-outline-secondary d-flex align-items-center" style="padding: 12px 24px; border-radius: 12px; font-weight: bold;">
+        Cancelar
+    </a>
+    <button type="submit" class="btn text-white" style="background-color: #B08D57; border: none; padding: 12px 36px; border-radius: 12px; font-weight: bold; transition: all 0.3s;">
+        <i class="bi bi-check-lg pe-2"></i> {{ button_label|default('Salvar Serviço') }}
+    </button>
+</div>
+
+{{ form_end(form, {render_rest: false}) }}

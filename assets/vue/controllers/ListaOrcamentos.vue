@@ -1,116 +1,99 @@
 <template>
-  <div class="orcamento-list-container py-5">
-    <div class="container mt-4">
-      <!-- Header Section -->
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 animate-on-scroll">
-        <div>
-          <span class="badge-premium mb-2">Painel de Controle</span>
-          <h1 class="display-5 fw-800 text-crema mb-0">Orçamentos Registrados</h1>
-          <p class="text-salvia opacity-75 mt-2">Acompanhe e gerencie todas as solicitações de clientes.</p>
-        </div>
-        <div class="mt-4 mt-md-0">
-          <a :href="newPath" class="btn-main-gold">
-            <i class="bi bi-plus-lg me-2"></i> Novo Orçamento
-          </a>
-        </div>
+  <div class="orcamentos-container">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+      <div>
+        <h2 class="section-title text-verde mb-1"><i class="bi bi-calculator me-2"></i>Gerenciar Orçamentos</h2>
+        <p class="text-muted mb-0">Acompanhe e gerencie todas as solicitações de clientes.</p>
       </div>
+      <a :href="newPath" class="btn-main">
+        <i class="bi bi-plus-lg me-2"></i> Novo Orçamento
+      </a>
+    </div>
 
-      <!-- Filters & Search -->
-      <div class="filters-panel glass-card mb-5 animate-on-scroll">
-        <div class="row g-3 align-items-center">
-          <div class="col-md-6 col-lg-8">
-            <div class="search-wrap">
-              <i class="bi bi-search search-icon"></i>
-              <input 
-                v-model="searchQuery" 
-                type="text" 
-                class="form-control custom-input" 
-                placeholder="Buscar por título ou serviço..."
-              >
+    <!-- Filters & Search -->
+    <div class="filters-panel glass-card mb-4">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-6 col-lg-8">
+          <div class="search-wrap position-relative">
+            <i class="bi bi-search search-icon position-absolute" style="left: 15px; top: 12px; color: #8E8577;"></i>
+            <input 
+              v-model="searchQuery" 
+              type="text" 
+              class="form-control custom-input" 
+              style="padding-left: 45px; border-radius: 12px; border: 1px solid rgba(176, 141, 87, 0.2);"
+              placeholder="Buscar por título ou id..."
+            >
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="d-flex gap-3 justify-content-md-end">
+            <div class="dropdown w-100">
+              <button class="btn w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown" style="border-radius: 12px; border: 1px solid rgba(142, 133, 119, 0.3); padding: 8px 15px; background: transparent; color: #8E8577; font-weight: 600;">
+                Ordenar por: {{ sortLabel }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" style="border: 1px solid rgba(176, 141, 87, 0.2); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <li><a class="dropdown-item" href="#" @click.prevent="sortBy('data', 'desc')">Mais Recentes</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="sortBy('data', 'asc')">Mais Antigos</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="sortBy('valorTotal', 'desc')">Maior Valor</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="sortBy('titulo', 'asc')">Título (A-Z)</a></li>
+              </ul>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="d-flex gap-3 justify-content-md-end">
-              <div class="dropdown w-100">
-                <button class="btn btn-outline-salvia w-100 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                  Ordenar por: {{ sortLabel }}
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                  <li><a class="dropdown-item" href="#" @click.prevent="sortBy('data', 'desc')">Mais Recentes</a></li>
-                  <li><a class="dropdown-item" href="#" @click.prevent="sortBy('data', 'asc')">Mais Antigos</a></li>
-                  <li><a class="dropdown-item" href="#" @click.prevent="sortBy('valorTotal', 'desc')">Maior Valor</a></li>
-                  <li><a class="dropdown-item" href="#" @click.prevent="sortBy('titulo', 'asc')">Título (A-Z)</a></li>
-                </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card table-responsive">
+      <table class="table custom-table align-middle mb-0">
+        <thead>
+          <tr>
+            <th width="80">ID</th>
+            <th>Título</th>
+            <th>Serviço</th>
+            <th>Área (m²)</th>
+            <th>Valor Total</th>
+            <th>Data</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="orcamento in filteredOrcamentos" :key="orcamento.id" class="table-row">
+            <td><span class="badge-id">#{{ orcamento.id }}</span></td>
+            <td><strong class="text-verde">{{ orcamento.titulo }}</strong></td>
+            <td class="text-muted"><small>{{ orcamento.id_servico?.nome || 'Não definido' }}</small></td>
+            <td><span class="text-muted">{{ orcamento.qtd }}</span></td>
+            <td>
+              <span class="price-pill">
+                {{ formatCurrency(orcamento.valorTotal) }}
+              </span>
+            </td>
+            <td class="text-muted"><small>{{ formatDate(orcamento.data) }}</small></td>
+            <td class="text-end">
+              <div class="action-buttons">
+                <a :href="getShowPath(orcamento.id)" class="btn-icon view" title="Visualizar">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <a :href="getEditPath(orcamento.id)" class="btn-icon edit" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </a>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Table Section -->
-      <div class="table-container glass-card animate-on-scroll">
-        <div v-if="filteredOrcamentos.length === 0" class="text-center py-5">
-          <div class="empty-state-icon mb-3">
-            <i class="bi bi-file-earmark-x display-1 opacity-25 text-salvia"></i>
-          </div>
-          <h3 class="text-crema">Nenhum registro encontrado</h3>
-          <p class="text-salvia">Tente ajustar sua busca ou adicione um novo orçamento.</p>
-        </div>
-
-        <div v-else class="table-responsive">
-          <table class="table custom-table">
-            <thead>
-              <tr>
-                <th scope="col" class="ps-4">ID</th>
-                <th scope="col">Título</th>
-                <th scope="col">Serviço</th>
-                <th scope="col">Área (m²)</th>
-                <th scope="col">Valor Total</th>
-                <th scope="col">Data</th>
-                <th scope="col" class="text-end pe-4">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="orcamento in filteredOrcamentos" :key="orcamento.id" class="table-row-animate">
-                <td class="ps-4 align-middle">
-                  <span class="id-badge">#{{ orcamento.id }}</span>
-                </td>
-                <td class="align-middle">
-                  <div class="fw-bold text-crema">{{ orcamento.titulo }}</div>
-                </td>
-                <td class="align-middle text-salvia">
-                   {{ orcamento.id_servico?.nome || 'Não definido' }}
-                </td>
-                <td class="align-middle text-salvia">
-                  {{ orcamento.qtd }}
-                </td>
-                <td class="align-middle text-bronze fw-bold">
-                  {{ formatCurrency(orcamento.valorTotal) }}
-                </td>
-                <td class="align-middle text-salvia small">
-                  {{ formatDate(orcamento.data) }}
-                </td>
-                <td class="pe-4 align-middle text-end">
-                  <div class="d-flex gap-2 justify-content-end">
-                    <a :href="getShowPath(orcamento.id)" class="action-btn view" title="Visualizar">
-                      <i class="bi bi-eye"></i>
-                    </a>
-                    <a :href="getEditPath(orcamento.id)" class="action-btn edit" title="Editar">
-                      <i class="bi bi-pencil-square"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </td>
+          </tr>
+          
+          <tr v-if="filteredOrcamentos.length === 0">
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 mb-3 d-block opacity-50"></i>
+              Nenhum registro encontrado.
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   orcamentos: {
@@ -166,13 +149,11 @@ const filteredOrcamentos = computed(() => {
     let valA = a[currentSort.value.key]
     let valB = b[currentSort.value.key]
 
-    // Handle nested data for service name sorting if needed
     if (currentSort.value.key === 'servico') {
       valA = a.id_servico?.nome || ''
       valB = b.id_servico?.nome || ''
     }
     
-    // Convert to numbers if comparing values
     if (currentSort.value.key === 'valorTotal' || currentSort.value.key === 'qtd') {
       valA = parseFloat(valA) || 0
       valB = parseFloat(valB) || 0
@@ -191,246 +172,170 @@ const sortBy = (key, order) => {
   currentSort.value = { key, order }
 }
 
-const getShowPath = (id) => {
-  return decodeURIComponent(props.showPathBase).replace(':id', id)
-}
-
-const getEditPath = (id) => {
-  return decodeURIComponent(props.editPathBase).replace(':id', id)
-}
+const getShowPath = (id) => decodeURIComponent(props.showPathBase).replace(':id', id)
+const getEditPath = (id) => decodeURIComponent(props.editPathBase).replace(':id', id)
 
 const formatCurrency = (value) => {
   if (value === null || value === undefined) return 'R$ 0,00'
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(value)
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
 }
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
   const date = new Date(dateString)
   return new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
   }).format(date)
 }
-
-onMounted(() => {
-  // Add scroll animations logic if needed
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in-up')
-      }
-    })
-  }, { threshold: 0.1 })
-
-  document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el))
-})
 </script>
 
 <style scoped>
-.orcamento-list-container {
-  min-height: 80vh;
-  background-color: #1b3328;
+.orcamentos-container {
+  padding: 10px 0;
+  width: 100%;
 }
 
-.text-crema { color: #F2E8CF; }
-.text-salvia { color: #A8B5A8; }
-.text-bronze { color: #B08D57; }
-.fw-800 { font-weight: 800; }
+.text-verde { color: #284B3B; }
+.section-title { font-weight: 800; font-size: 2rem; }
 
-.badge-premium {
-  background: rgba(176, 141, 87, 0.15);
-  color: #B08D57;
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  border: 1px solid rgba(176, 141, 87, 0.3);
-  display: inline-block;
-}
-
-.glass-card {
-  background: rgba(40, 75, 59, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(176, 141, 87, 0.3);
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-}
-
-.btn-main-gold {
+.btn-main {
   background: #B08D57;
-  color: white !important;
+  color: white;
   border: none;
-  padding: 12px 28px;
+  padding: 14px 28px;
   border-radius: 12px;
   font-weight: 700;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(176, 141, 87, 0.2);
+  box-shadow: 0 4px 15px rgba(176, 141, 87, 0.3);
 }
 
-.btn-main-gold:hover {
+.btn-main:hover {
   background: #c19b62;
   transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(176, 141, 87, 0.3);
+  color: white;
+  box-shadow: 0 8px 20px rgba(176, 141, 87, 0.4);
 }
 
-.search-wrap {
-  position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #B08D57;
-  opacity: 0.7;
+.glass-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(176, 141, 87, 0.15);
+  overflow: hidden;
 }
 
 .custom-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(176, 141, 87, 0.2);
-  color: #F2E8CF;
-  padding: 12px 15px 12px 45px;
-  border-radius: 10px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
-
 .custom-input:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: #B08D57;
-  box-shadow: 0 0 0 0.25rem rgba(176, 141, 87, 0.15);
-  color: #F2E8CF;
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), 0 0 0 3px rgba(176, 141, 87, 0.2);
+  border-color: #B08D57 !important;
 }
 
-.btn-outline-salvia {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(168, 181, 168, 0.3);
-  color: #A8B5A8;
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-weight: 600;
-}
-
-.btn-outline-salvia:hover, .btn-outline-salvia:focus {
-  background: rgba(168, 181, 168, 0.1);
-  border-color: #A8B5A8;
-  color: #F2E8CF;
-}
-
-.dropdown-menu-dark {
-  background-color: #1b3328;
-  border: 1px solid rgba(176, 141, 87, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.dropdown-item:hover {
-  background-color: rgba(176, 141, 87, 0.2);
-  color: #F2E8CF;
-}
-
-.custom-table {
-  color: #F2E8CF;
-  margin-bottom: 0;
-}
-
-.custom-table thead th {
-  background: transparent;
-  color: #B08D57;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  letter-spacing: 1.5px;
+.custom-table th {
+  background: #ffffff;
+  color: #8E8577;
   font-weight: 700;
-  border-bottom: 1px solid rgba(176, 141, 87, 0.2);
-  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(176, 141, 87, 0.15);
+  padding: 18px 15px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
 }
 
-.custom-table tbody td {
-  background: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 20px;
-  padding-bottom: 20px;
+.custom-table td {
+  padding: 18px 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  vertical-align: middle;
 }
 
-.id-badge {
+.table-row {
+  transition: all 0.3s ease;
+}
+
+.table-row:hover td {
+  background: rgba(176, 141, 87, 0.02);
+}
+
+.table-row:last-child td {
+  border-bottom: none;
+}
+
+.badge-id {
+  background: #fdfaf3;
+  color: #8E8577;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid rgba(176, 141, 87, 0.2);
+}
+
+.price-pill {
   background: rgba(176, 141, 87, 0.1);
   color: #B08D57;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: inline-block;
 }
 
-.action-btn {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  transition: all 0.2s ease;
   text-decoration: none;
+  transition: all 0.2s;
+  font-size: 1.1rem;
 }
 
-.action-btn.view {
-  background: rgba(168, 181, 168, 0.1);
-  color: #A8B5A8;
+.btn-icon.view {
+  background: rgba(40, 75, 59, 0.08);
+  color: #284B3B;
+}
+.btn-icon.view:hover {
+  background: #284B3B;
+  color: white;
+  transform: translateY(-2px);
 }
 
-.action-btn.view:hover {
-  background: rgba(168, 181, 168, 0.2);
-  color: #F2E8CF;
-}
-
-.action-btn.edit {
+.btn-icon.edit {
   background: rgba(176, 141, 87, 0.1);
   color: #B08D57;
 }
-
-.action-btn.edit:hover {
+.btn-icon.edit:hover {
   background: #B08D57;
   color: white;
-}
-
-/* Animations */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s ease-out;
-}
-
-.fade-in-up {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.table-row-animate {
-  transition: background-color 0.2s ease;
-}
-
-.table-row-animate:hover td {
-  background-color: rgba(255, 255, 255, 0.02);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
-  .glass-card {
-    padding: 20px;
+  .glass-card { 
+    padding: 15px; 
+    border-radius: 15px; 
   }
+  .section-title { font-size: 1.5rem; }
+  .btn-main { width: 100%; justify-content: center; }
   
-  .custom-table thead {
-    display: none;
+  .custom-table th, .custom-table td { 
+    padding: 12px 10px; 
+    white-space: nowrap;
   }
 }
 </style>

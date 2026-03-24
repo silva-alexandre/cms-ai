@@ -64,23 +64,64 @@
         <div class="row g-4">
           <article 
             class="col-md-4" 
-            v-for="(feature, index) in features.items" 
-            :key="index"
+            v-for="(servico, index) in servicos" 
+            :key="servico.id || index"
           >
             <div 
-              class="feature-card animate-on-scroll" 
-              :style="{ 
-                animationDelay: `${index * 0.1}s`,
-                backgroundImage: `url(${feature.image || 'https://images.unsplash.com/photo-1562664377-709f2c337eb2?auto=format&fit=crop&w=600&q=80'})`
-              }"
+              class="service-card animate-on-scroll" 
+              :style="{ animationDelay: `${index * 0.1}s` }"
             >
-              <div class="feature-content-wrapper">
-                <div class="feature-icon-small mb-2">{{ feature.icon }}</div>
-                <h5 class="fw-bold text-white mb-2">{{ feature.title }}</h5>
-                <p class="feature-description small mb-0">{{ feature.description }}</p>
+              <div class="service-image-container">
+                <div 
+                  class="service-image" 
+                  :style="{ backgroundImage: `url(${getServicoImage(servico, index)})` }"
+                ></div>
+
+                <!-- Carousel Controls -->
+                <div v-if="servico.foto && servico.foto.length > 1" class="service-carousel-controls">
+                  <button @click.prevent="prevServicoImage(servico, index)" class="carousel-btn"><i class="bi bi-chevron-left"></i></button>
+                  <button @click.prevent="nextServicoImage(servico, index)" class="carousel-btn"><i class="bi bi-chevron-right"></i></button>
+                </div>
+                
+                <!-- Carousel Indicators -->
+                <div v-if="servico.foto && servico.foto.length > 1" class="service-carousel-indicators">
+                  <span 
+                    v-for="(_, imgIdx) in servico.foto" 
+                    :key="imgIdx"
+                    class="dot"
+                    :class="{ active: (activeImageIndices[index] || 0) === imgIdx }"
+                    @click.prevent="setServicoImage(index, imgIdx)"
+                  ></span>
+                </div>
+
+                <div class="price-badge" v-if="servico.preco && servico.preco !== '0'">
+                  <span class="currency">R$</span>
+                  <span class="value">{{ servico.preco }}</span>
+                  <span class="unit">/m²</span>
+                </div>
+              </div>
+
+              <div class="service-content">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="service-icon-box flex-shrink-0 me-3">
+                    {{ ['🎨', '🏠', '🏢', '✨', '🖌️'][index % 5] }}
+                  </div>
+                  <h5 class="fw-bold text-verde mb-0">{{ servico.nome }}</h5>
+                </div>
+                <p class="service-description text-muted mb-4">{{ servico.detalhe }}</p>
+                
+                <div class="service-footer mt-auto">
+                  <a href="#simulador" class="btn-service-outline">Solicitar Orçamento</a>
+                </div>
               </div>
             </div>
           </article>
+
+          <div v-if="servicos.length === 0" class="col-12 text-center text-muted py-5">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Carregando serviços...</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -176,18 +217,6 @@ import NovoOrcamento from './NovoOrcamento.vue'
 const props = defineProps({
   csrfToken: { type: String, default: '' },
   hero: { type: Object, default: () => ({}) },
-  features: {
-    type: Object,
-    default: () => ({
-      title: 'Excelência em cada detalhe',
-      subtitle: 'Trabalhamos com os melhores materiais e técnicas para um acabamento impecável.',
-      items: [
-        { icon: '🎨', title: 'Consultoria de Cores', description: 'Ajudamos você a escolher a paleta perfeita para o seu ambiente.', image: 'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=800&q=80' },
-        { icon: '🏠', title: 'Pintura Residencial', description: 'Transformamos lares com profissionalismo e limpeza.', image: 'https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?auto=format&fit=crop&w=800&q=80' },
-        { icon: '🏢', title: 'Comercial & Industrial', description: 'Projetos de grande escala com agilidade e durabilidade.', image: 'https://images.unsplash.com/photo-1562664377-709f2c337eb2?auto=format&fit=crop&w=800&q=80' }
-      ]
-    })
-  },
   about: {
     type: Object,
     default: () => ({
@@ -201,6 +230,10 @@ const props = defineProps({
 })
 
 // === Estado Reativo ===
+const features = {
+  title: 'Cores que inspiram, resultados que impressionam',
+  subtitle: 'Renove a sensação de bem-estar em seu lar, garantimos elegância e proteção para o seu patrimônio.'
+}
 const observer = ref(null)
 const scrollY = ref(0)
 
@@ -212,6 +245,7 @@ const heroImages = [
 ]
 const currentSlide = ref(0)
 const slideInterval = ref(null)
+const servicos = ref([])
 
 // === Métodos ===
 const updateScroll = () => {
@@ -222,7 +256,32 @@ const nextSlide = () => {
   currentSlide.value = (currentSlide.value + 1) % heroImages.length
 }
 
+// === Métodos: Carousel de Serviços ===
+const activeImageIndices = reactive({})
 
+const getServicoImage = (servico, index) => {
+  const activeIdx = activeImageIndices[index] || 0
+  if (servico.foto && servico.foto.length > activeIdx) {
+    return '/uploads/' + servico.foto[activeIdx]
+  }
+  return 'https://images.unsplash.com/photo-1562664377-709f2c337eb2?auto=format&fit=crop&w=600&q=80'
+}
+
+const nextServicoImage = (servico, index) => {
+  if (!servico.foto || servico.foto.length <= 1) return
+  const current = activeImageIndices[index] || 0
+  activeImageIndices[index] = (current + 1) % servico.foto.length
+}
+
+const prevServicoImage = (servico, index) => {
+  if (!servico.foto || servico.foto.length <= 1) return
+  const current = activeImageIndices[index] || 0
+  activeImageIndices[index] = (current - 1 + servico.foto.length) % servico.foto.length
+}
+
+const setServicoImage = (index, imgIdx) => {
+  activeImageIndices[index] = imgIdx
+}
 
 const initScrollAnimations = () => {
   observer.value = new IntersectionObserver((entries) => {
@@ -239,10 +298,22 @@ const initScrollAnimations = () => {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
   initScrollAnimations()
   window.addEventListener('scroll', updateScroll)
   slideInterval.value = setInterval(nextSlide, 6000)
+
+  try {
+    const response = await fetch('/servico/api')
+    if (response.ok) {
+      servicos.value = await response.json()
+      nextTick(() => {
+        document.querySelectorAll('.animate-on-scroll').forEach(el => observer.value?.observe(el))
+      })
+    }
+  } catch (error) {
+    console.error('Erro ao buscar serviços:', error)
+  }
 })
 
 onUnmounted(() => {
@@ -354,70 +425,172 @@ onUnmounted(() => {
   color: #284B3B;
 }
 
-.feature-card {
-  position: relative;
-  height: 350px;
-  border-radius: 24px;
+.service-card {
+  background: #ffffff;
+  border-radius: 20px;
   overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s ease;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  border: none;
+  border: 1px solid rgba(176, 141, 87, 0.1);
 }
 
-.feature-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
-  z-index: 1;
-  transition: opacity 0.3s ease;
-}
-
-.feature-content-wrapper {
-  position: relative;
-  z-index: 2;
-  padding: 25px;
-  background: #1b3328; /* Fundo opaco escuro combinando com o tema */
-  border-top: 1px solid rgba(176, 141, 87, 0.3);
-  transform: translateY(0);
-  transition: all 0.4s ease;
-}
-
-.feature-description {
-  color: #A8B5A8;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-.feature-card:hover {
+.service-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 40px rgba(40, 75, 59, 0.12);
+  border-color: rgba(176, 141, 87, 0.3);
 }
 
-.feature-card:hover .feature-content-wrapper {
-  background: #234234;
+.service-image-container {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
 }
 
-.feature-icon-small {
-  font-size: 1.5rem;
+.service-image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.service-card:hover .service-image {
+  transform: scale(1.05);
+}
+
+.service-carousel-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.service-card:hover .service-carousel-controls {
+  opacity: 1;
+}
+
+.carousel-btn {
+  background: rgba(27, 51, 40, 0.6);
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.carousel-btn:hover {
   background: #B08D57;
-  width: 40px;
-  height: 40px;
+  transform: scale(1.1);
+}
+
+.service-carousel-indicators {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.service-carousel-indicators .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.service-carousel-indicators .dot.active {
+  background: #B08D57;
+  width: 16px;
+  border-radius: 4px;
+}
+
+.price-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #B08D57;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 14px 0 0 0;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.price-badge .currency { font-size: 0.9rem; opacity: 0.9; }
+.price-badge .value { font-size: 1.4rem; line-height: 1; }
+.price-badge .unit { font-size: 0.75rem; font-weight: 500; opacity: 0.8; }
+
+.service-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.service-icon-box {
+  width: 48px;
+  height: 48px;
+  background: rgba(176, 141, 87, 0.1);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.5rem;
+  color: #B08D57;
+}
+
+.service-description {
+  flex-grow: 1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.btn-service-outline {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  border: 1px solid #B08D57;
+  color: #B08D57;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  margin-top: -45px; /* Offset to make it float halfway out of the opaque block */
-  position: relative;
-  z-index: 3;
-  margin-left: 0;
-  border: 2px solid #1b3328;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-service-outline:hover {
+  background: #B08D57;
+  color: #ffffff;
 }
 
 .section-title {
@@ -509,20 +682,19 @@ onUnmounted(() => {
     width: 100%;
   }
 
-  /* Responsividade Features */
-  .feature-card {
-    height: 300px;
+  /* Responsividade Features/Services */
+  .service-image-container {
+    height: 180px;
   }
 
-  .feature-content-wrapper {
+  .service-content {
     padding: 20px;
   }
 
-  .feature-icon-small {
-    width: 36px;
-    height: 36px;
-    font-size: 1.2rem;
-    margin-top: -38px;
+  .service-icon-box {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
   }
 
   /* Responsividade About */
