@@ -1,47 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Servico index{% endblock %}
+{% block title %}Gerenciar Serviços{% endblock %}
 
 {% block body %}
-    <h1>Servico index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Detalhe</th>
-                <th>Preco</th>
-                <th>Foto</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for servico in servicos %}
-            <tr>
-                <td>{{ servico.id }}</td>
-                <td>{{ servico.nome }}</td>
-                <td>{{ servico.detalhe }}</td>
-                <td>{{ servico.preco }}</td>
-                <td>
-                    {% for foto in servico.foto %}
-                        <img src="{{ asset('uploads/' ~ foto) }}" alt="Foto" style="width: 50px; height: 50px; object-fit: cover; margin-right: 5px;">
-                    {% else %}
-                        Sem foto
-                    {% endfor %}
-                </td>
-                <td>
-                    <a href="{{ path('app_servico_show', {'id': servico.id}) }}">show</a>
-                    <a href="{{ path('app_servico_edit', {'id': servico.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
+<main class="py-5" style="min-height: 80vh; background-color: #fdfaf3; padding-top: 160px !important;">
+    <div class="container">
+        {% set parsed_servicos = [] %}
+        {% for s in servicos %}
+            {% set parsed_servicos = parsed_servicos|merge([{
+                id: s.id,
+                nome: s.nome,
+                detalhe: s.detalhe,
+                preco: s.preco,
+                foto: s.foto|default([])
+            }]) %}
         {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_servico_new') }}">Create new</a>
+        <div {{ vue_component('ListaServico', { 'initialServicos': parsed_servicos }) }}></div>
+    </div>
+</main>
 {% endblock %}

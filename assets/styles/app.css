@@ -12,6 +12,17 @@ body {
     color: #333;
 }
 
+/* Evita que o conteúdo das páginas fique atrás do navbar fixo */
+body:not(.home-page) {
+    padding-top: 106px;
+}
+
+@media (max-width: 991.98px) {
+    body:not(.home-page) {
+        padding-top: 60px;
+    }
+}
+
 /* Utilitários baseados na nova marca */
 .bg-verde-floresta {
     background-color: var(--verde-floresta);

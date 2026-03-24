@@ -1,44 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Servico{% endblock %}
+{% block title %}Detalhes do Serviço{% endblock %}
 
 {% block body %}
-    <h1>Servico</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ servico.id }}</td>
-            </tr>
-            <tr>
-                <th>Nome</th>
-                <td>{{ servico.nome }}</td>
-            </tr>
-            <tr>
-                <th>Detalhe</th>
-                <td>{{ servico.detalhe }}</td>
-            </tr>
-            <tr>
-                <th>Preco</th>
-                <td>{{ servico.preco }}</td>
-            </tr>
-            <tr>
-                <th>Foto</th>
-                <td>
-                    {% for foto in servico.foto %}
-                        <img src="{{ asset('uploads/' ~ foto) }}" alt="Foto" style="width: 150px; height: 150px; object-fit: cover; margin-right: 10px; border-radius: 8px;">
-                    {% else %}
-                        Nenhuma imagem enviada.
-                    {% endfor %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_servico_index') }}">back to list</a>
-
-    <a href="{{ path('app_servico_edit', {'id': servico.id}) }}">edit</a>
-
-    {{ include('servico/_delete_form.html.twig') }}
+<main class="py-5" style="min-height: 80vh; background-color: #fdfaf3; padding-top: 160px !important;">
+    <div class="container">
+        <div {{ vue_component('Servico', {
+            'servico': {
+                'id': servico.id,
+                'nome': servico.nome,
+                'detalhe': servico.detalhe,
+                'preco': servico.preco,
+                'foto': servico.foto|default([])
+            },
+            'deleteUrl': path('app_servico_delete', {'id': servico.id}),
+            'csrfToken': csrf_token('delete' ~ servico.id)
+        }) }}></div>
+    </div>
+</main>
 {% endblock %}

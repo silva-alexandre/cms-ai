@@ -1,12 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Orcamento index{% endblock %}
+{% block title %}Gerenciar Orçamentos{% endblock %}
 
 {% block body %}
-    <div {{ vue_component('ListaOrcamentos', {
-        'orcamentos': orcamentos,
-        'newPath': path('app_orcamento_new'),
-        'showPathBase': path('app_orcamento_show', {'id': ':id'}),
-        'editPathBase': path('app_orcamento_edit', {'id': ':id'})
-    }) }}></div>
+<main class="py-5" style="min-height: 80vh; background-color: #fdfaf3; padding-top: 160px !important;">
+    <div class="container">
+        <div {{ vue_component('ListaOrcamentos', {
+            'orcamentos': orcamentos,
+            'newPath': path('app_orcamento_new'),
+            'showPathBase': path('app_orcamento_show', {'id': ':id'}),
+            'editPathBase': path('app_orcamento_edit', {'id': ':id'})
+        }) }}></div>
+    </div>
+</main>
 {% endblock %}

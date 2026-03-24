@@ -1,5 +1,5 @@
 <template>
-  <section class="section py-5" id="simulador-orcamento">
+  <section class="section py-5" id="simulador-orcamento" :class="{'pt-navbar': !isEmbedded}">
     <div class="container">
       <div class="text-center mb-5 animate-on-scroll">
         <span class="badge-premium mb-3">Calculadora Proativa</span>
@@ -585,5 +585,9 @@ onMounted(() => {
   top: 50%;
   transform: translateY(-50%);
   opacity: 0.6;
+}
+
+.pt-navbar {
+  padding-top: 130px !important;
 }
 </style>

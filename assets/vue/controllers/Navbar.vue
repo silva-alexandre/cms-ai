@@ -3,6 +3,7 @@
     <div class="container">
       <a class="navbar-brand" href="/">
         <img src="https://gr-pintura.com.br/gr-pintura-logo.png" alt="GR Pintura Logo" class="brand-img">
+        GR Pintura
       </a>
 
       <button 
@@ -18,33 +19,37 @@
 
       <div class="collapse navbar-collapse justify-content-end" :class="{ 'show': isMobileMenuOpen }" id="menu">
         <ul class="navbar-nav align-items-center">
-          <li class="nav-item">
-            <a class="nav-link" href="#features">Serviços</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#about">Sobre</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contact">Contato</a>
-          </li>
-
-          <!-- Itens autenticados -->
-          <template v-if="isAuthenticated">
+          <!-- Visitante -->
+          <template v-if="!isAuthenticated">
             <li class="nav-item">
-              <a class="nav-link" href="/admin">Dashboard</a>
+              <a class="nav-link" href="/">Início</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/#servicos">Serviços</a>
+            </li>
+            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+              <a class="btn btn-nav px-4" href="/orcamento/novo">Orçamento</a>
+            </li>
+          </template>
+          
+          <!-- Itens autenticados -->
+          <template v-else>
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home do Site</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/cliente/">Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/servico/">Serviços</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/orcamento/">Orçamentos</a>
             </li>
             <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
               <a href="/logout" class="btn btn-logout px-4">Sair</a>
             </li>
           </template>
-
-          <!-- Orçamento / Login -->
-          <li v-else class="nav-item ms-lg-3 mt-2 mt-lg-0">
-            <a href="#simulador" class="btn btn-nav">
-              <i class="bi bi-calculator me-1"></i>
-              Simular Orçamento
-            </a>
-          </li>
         </ul>
       </div>
     </div>
@@ -86,31 +91,27 @@ onUnmounted(() => {
 
 <style scoped>
 .navbar-custom {
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  padding: 18px 0;
+  padding: 8px 0;
   transition: .3s;
-  background: transparent;
+  background: rgba(40, 75, 59, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(176, 141, 87, 0.15);
 }
 
 .navbar-custom.scrolled {
-  position: fixed;
-  background: rgba(40, 75, 59, .95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 12px 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background: rgba(27, 51, 40, 0.98);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(176, 141, 87, 0.2);
 }
 
 .brand-img {
-  height: 70px;
+  height: 60px;
   transition: .3s;
-}
-
-.navbar-custom.scrolled .brand-img {
-  height: 50px;
 }
 
 .navbar-nav .nav-link {
@@ -159,13 +160,12 @@ onUnmounted(() => {
 /* Mobile Adjustments */
 @media (max-width: 991.98px) {
   .navbar-custom {
-    padding: 12px 0;
+    padding: 8px 0;
     background: rgba(40, 75, 59, .96);
-    position: fixed;
   }
 
   .brand-img {
-    height: 48px;
+    height: 40px;
   }
 
   .navbar-nav {

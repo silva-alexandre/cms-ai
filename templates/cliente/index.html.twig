@@ -3,35 +3,42 @@
 {% block title %}Cliente index{% endblock %}
 
 {% block body %}
-    <h1>Cliente index</h1>
+<main class="py-5" style="min-height: 80vh; background-color: #fdfaf3; padding-top: 160px !important;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-5 fw-bold text-verde mb-0" style="color: #284B3B;">Gerenciar Clientes</h1>
+            <a href="{{ path('app_cliente_new') }}" class="btn btn-primary" style="background:#B08D57; border:none; padding:10px 20px; border-radius:10px; font-weight:bold;">Novo Cliente</a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Contato</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for cliente in clientes %}
-            <tr>
-                <td>{{ cliente.id }}</td>
-                <td>{{ cliente.nome }}</td>
-                <td>{{ cliente.contato }}</td>
-                <td>
-                    <a href="{{ path('app_cliente_show', {'id': cliente.id}) }}">show</a>
-                    <a href="{{ path('app_cliente_edit', {'id': cliente.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_cliente_new') }}">Create new</a>
+        <div class="glass-card table-responsive" style="background: #ffffff; border-radius: 20px; padding: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Contato</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for cliente in clientes %}
+                    <tr>
+                        <td><span class="badge bg-light text-dark border">#{{ cliente.id }}</span></td>
+                        <td><strong>{{ cliente.nome }}</strong></td>
+                        <td class="text-muted">{{ cliente.contato }}</td>
+                        <td class="text-end">
+                            <a href="{{ path('app_cliente_show', {'id': cliente.id}) }}" class="btn btn-sm btn-outline-secondary me-2">Ver</a>
+                            <a href="{{ path('app_cliente_edit', {'id': cliente.id}) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-muted">Nenhum cliente cadastrado.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
 {% endblock %}

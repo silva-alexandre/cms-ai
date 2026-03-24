@@ -3,9 +3,17 @@
 {% block title %}New Orcamento{% endblock %}
 
 {% block body %}
-    <h1>Create new Orcamento</h1>
+<main class="py-5" style="min-height: 80vh; background-color: #fdfaf3; padding-top: 160px !important;">
+    <div class="container">
+        <div class="mb-4">
+            <h1 class="display-5 fw-bold text-verde mb-0" style="color: #284B3B;">Novo Orçamento</h1>
+        </div>
 
-    {{ include('orcamento/_form.html.twig') }}
+        {{ include('orcamento/_form.html.twig') }}
 
-    <a href="{{ path('app_orcamento_index') }}">back to list</a>
+        <div class="mt-4">
+            <a href="{{ path('app_orcamento_index') }}" class="btn btn-outline-secondary">Voltar para a lista</a>
+        </div>
+    </div>
+</main>
 {% endblock %}
