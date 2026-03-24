@@ -17,7 +17,7 @@
         <div class="col-lg-7">
           <div class="glass-card animate-on-scroll">
             <span class="offer-badge mb-3">
-              <i class="bi bi-fire me-1"></i> Promoção Especial
+              <i class="bi bi-fire me-1"></i> Consulte nossos serviços
             </span>
 
             <h1 class="display-4 fw-800 mb-4 text-crema">
@@ -31,7 +31,7 @@
 
             <div class="d-flex gap-3 flex-wrap">
               <a href="#simulador" class="btn-main btn-lg">
-                <i class="bi bi-whatsapp me-2"></i> Solicitar Orçamento
+                <i class="bi bi-whatsapp me-2"></i> Simular Orçamento
               </a>
               <a href="#features" class="btn-outline-crema btn-lg">
                 Ver Portfólio
