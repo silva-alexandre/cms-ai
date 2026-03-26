@@ -1,11 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" :class="{ 'scrolled': isScrolled }">
-    <div class="container">
+    <div class="container position-relative d-flex align-items-center">
       <a class="navbar-brand" href="/">
-        <img src="https://gr-pintura.com.br/gr-pintura-logo.png" alt="GR Pintura Logo" class="brand-img">
-        GR Pintura
+        <img src="/gr-pintura-logo.png" alt="GR Pintura Logo" class="brand-img">
+        <span class="brand-text">GR Pinturas</span>
       </a>
-
       <button 
         class="navbar-toggler" 
         type="button" 
@@ -19,19 +18,28 @@
 
       <div class="collapse navbar-collapse justify-content-end" :class="{ 'show': isMobileMenuOpen }" id="menu">
         <ul class="navbar-nav align-items-center">
-          <!-- Visitante -->
+          <!-- Itens Públicos -->
           <template v-if="!isAuthenticated">
             <li class="nav-item">
-              <a class="nav-link" href="/">Início</a>
+              <a class="nav-link" href="/#features">Serviços</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/#servicos">Serviços</a>
+              <a class="nav-link" href="/#about">Sobre</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/galeria">Galeria</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/#contact">Contato</a>
             </li>
             <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-              <a class="btn btn-nav px-4" href="/orcamento/novo">Orçamento</a>
+              <a href="#simulador" class="btn btn-nav">
+                <i class="bi bi-calculator me-1"></i>
+                Simular Orçamento
+              </a>
             </li>
           </template>
-          
+
           <!-- Itens autenticados -->
           <template v-else>
             <li class="nav-item">
@@ -95,23 +103,35 @@ onUnmounted(() => {
   top: 0;
   width: 100%;
   z-index: 1000;
-  padding: 8px 0;
+  padding: 9px 0;
   transition: .3s;
-  background: rgba(40, 75, 59, 0.95);
+  background: rgba(40, 75, 59, 0.85);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(176, 141, 87, 0.15);
 }
 
 .navbar-custom.scrolled {
+  position: fixed;
   background: rgba(27, 51, 40, 0.98);
+  padding: 12px 0;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(176, 141, 87, 0.2);
+}
+.navbar-brand {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  margin-right: auto; /* Aligns to left in flex container */
 }
 
 .brand-img {
   height: 60px;
   transition: .3s;
+}
+
+.navbar-custom.scrolled .brand-img {
+  height: 55px;
 }
 
 .navbar-nav .nav-link {
@@ -165,7 +185,7 @@ onUnmounted(() => {
   }
 
   .brand-img {
-    height: 40px;
+    height: 75px;
   }
 
   .navbar-nav {
@@ -194,7 +214,7 @@ onUnmounted(() => {
   }
   
   .brand-img {
-    height: 40px;
+    height: 85px;
   }
 }
 </style>

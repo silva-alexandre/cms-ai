@@ -192,7 +192,7 @@ const formatDate = (dateString) => {
 
 <style scoped>
 .orcamentos-container {
-  padding: 130px 0 30px;
+  padding: 10px 0;
   width: 100%;
 }
 

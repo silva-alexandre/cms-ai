@@ -21,12 +21,12 @@
             </span>
 
             <h1 class="display-4 fw-800 mb-4 text-crema">
-              {{ hero.title || 'Cores que inspiram e resultados que impressionam' }}
+              {{ hero.title || 'Cores que inspiram, resultados que impresionam' }}
             </h1>
 
             <p class="lead mb-4 text-salvia">
-              Transformamos ambientes com cores vibrantes e acabamento impecável.
-              <strong class="text-white">Simule o valor do seu orçamento agora!</strong>
+              Renove a sensação de se sentir bem em seu lar, garantimos elegância e proteção para o seu patrimônio.
+              <strong class="text-white">Agende sua pintura este mês e ganhe 10% de desconto.</strong>
             </p>
 
             <div class="d-flex gap-3 flex-wrap">
