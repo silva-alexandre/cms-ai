@@ -1,5 +1,5 @@
 <template>
-  <section class="section py-5" id="simulador-orcamento">
+  <section :class="['section', isEmbedded ? 'py-5' : 'pb-5 pt-navbar']" id="simulador-orcamento">
     <div class="container">
       <div class="text-center mb-5 animate-on-scroll">
         <span class="badge-premium mb-3">Calculadora Proativa</span>

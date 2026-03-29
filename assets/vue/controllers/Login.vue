@@ -248,7 +248,7 @@ onMounted(() => {
 @media (max-width: 767px) {
   .login-wrapper {
     background-attachment: scroll;
-    padding-top: 20px;
+    padding-top: 100px;
     padding-bottom: 20px;
   }
   

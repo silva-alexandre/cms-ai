@@ -89,21 +89,18 @@ onUnmounted(() => {
 
 <style scoped>
 .navbar-custom {
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  padding: 18px 0;
+  padding: 12px 0;
   transition: .3s;
-  background: transparent;
-}
-
-.navbar-custom.scrolled {
-  position: fixed;
-  background: rgba(40, 75, 59, .95);
+  background: rgba(40, 75, 59, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 12px 0;
+}
+
+.navbar-custom.scrolled, .navbar-custom.solid-bg {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 .navbar-brand {
@@ -114,12 +111,12 @@ onUnmounted(() => {
 }
 
 .brand-img {
-  height: 100px;
+  height: 60px;
   transition: .3s;
 }
 
 .navbar-custom.scrolled .brand-img {
-  height: 55px;
+  height: 60px;
 }
 
 .navbar-nav .nav-link {
@@ -169,12 +166,12 @@ onUnmounted(() => {
 @media (max-width: 991.98px) {
   .navbar-custom {
     padding: 12px 0;
-    background: rgba(40, 75, 59, .96);
+    background: rgba(40, 75, 59, 0.7);
     position: fixed;
   }
 
   .brand-img {
-    height: 75px;
+    height: 60px;
   }
 
   .navbar-nav {
@@ -203,7 +200,7 @@ onUnmounted(() => {
   }
   
   .brand-img {
-    height: 85px;
+    height: 60px;
   }
 }
 </style>

@@ -6,6 +6,11 @@
     --cinza-quente: #8E8577;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px; 
+}
+
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     background: #f8f9fa;
@@ -23,6 +28,15 @@ body {
 
 .text-bronze {
     color: var(--bronze-antigo);
+}
+
+/* Espaçamento para Navbar Fixa */
+.pt-navbar {
+    padding-top: 100px !important;
+}
+
+.mt-navbar {
+    margin-top: 100px !important;
 }
 
 /* Transições suaves */

@@ -237,6 +237,7 @@ onMounted(() => {
 .orcamento-list-container {
   min-height: 80vh;
   background-color: #1b3328;
+  padding-top: 100px;
 }
 
 .text-crema { color: #F2E8CF; }
