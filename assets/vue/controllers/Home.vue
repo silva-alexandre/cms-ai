@@ -52,7 +52,7 @@
 
   <main id="main-content">
     <!-- Seção de Recursos -->
-    <section id="features" class="section py-5" style="background: #fdfaf3;">
+    <section id="features" class="section pb-5 pt-navbar" style="background: #fdfaf3;">
       <div class="container">
         <div class="row justify-content-center text-center mb-5 mt-4">
           <div class="col-lg-8">
@@ -238,10 +238,10 @@ const observer = ref(null)
 const scrollY = ref(0)
 
 const heroImages = [
-  '/04-gr-text-proj.jpg',
-  '/4.jpg',
-  '/5.jpg',
-  '/text-background.png'
+  '04-gr-text-proj.jpg',
+  '4.jpg',
+  '5.jpg',
+  'text-background.png'
 ]
 const currentSlide = ref(0)
 const slideInterval = ref(null)
