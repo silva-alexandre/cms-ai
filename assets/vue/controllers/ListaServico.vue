@@ -5,9 +5,14 @@
         <h2 class="section-title text-verde mb-1"><i class="bi bi-tools me-2"></i>Gerenciar Serviços</h2>
         <p class="text-muted mb-0">Gerencie o portfólio de serviços oferecidos pelo sistema.</p>
       </div>
-      <a href="/servico/new" class="btn-main">
-        <i class="bi bi-plus-lg me-2"></i>  Novo Serviço
-      </a>
+      <div class="d-flex gap-2">
+        <a href="/" class="btn-outline-main">
+          <i class="bi bi-arrow-left me-2"></i> Voltar
+        </a>
+        <a href="/servico/new" class="btn-main">
+          <i class="bi bi-plus-lg me-2"></i>  Novo Serviço
+        </a>
+      </div>
     </div>
 
     <div class="glass-card table-responsive">
@@ -24,8 +29,8 @@
         </thead>
         <tbody>
           <tr v-for="servico in servicosData" :key="servico.id" class="table-row">
-            <td><span class="badge-id">#{{ servico.id }}</span></td>
-            <td>
+            <td data-label="ID"><span class="badge-id">#{{ servico.id }}</span></td>
+            <td data-label="Fotos">
               <div class="photos-container">
                 <template v-if="servico.foto && servico.foto.length > 0">
                   <div class="photo-thumbnail" 
@@ -42,16 +47,16 @@
                 </div>
               </div>
             </td>
-            <td><strong class="text-verde">{{ servico.nome }}</strong></td>
-            <td class="text-muted"><small>{{ servico.detalhe }}</small></td>
-            <td>
+            <td data-label="Nome do Serviço"><strong class="text-verde">{{ servico.nome }}</strong></td>
+            <td data-label="Detalhe" class="text-muted"><small>{{ servico.detalhe }}</small></td>
+            <td data-label="Preço (m²)">
               <span class="price-pill" v-if="servico.preco && servico.preco !== '0'">
                 R$ {{ servico.preco }}
               </span>
               <span class="text-muted" v-else>Sob consulta</span>
             </td>
-            <td class="text-end">
-              <div class="action-buttons">
+            <td data-label="Ações" class="text-end">
+              <div class="action-buttons justify-content-end">
                 <a :href="`/servico/${servico.id}`" class="btn-icon view" title="Visualizar">
                   <i class="bi bi-eye"></i>
                 </a>
@@ -114,7 +119,6 @@ onMounted(async () => {
 
 <style scoped>
 .servicos-container {
-  padding: 130px 0 30px;
   width: 100%;
 }
 
@@ -140,6 +144,26 @@ onMounted(async () => {
   transform: translateY(-2px);
   color: white;
   box-shadow: 0 8px 20px rgba(176, 141, 87, 0.4);
+}
+
+.btn-outline-main {
+  background: transparent;
+  color: #B08D57;
+  border: 2px solid #B08D57;
+  padding: 12px 26px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-main:hover {
+  background: #B08D57;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(176, 141, 87, 0.2);
 }
 
 .glass-card {
@@ -290,6 +314,10 @@ onMounted(async () => {
 }
 
 @media (max-width: 768px) {
+  .servicos-container {
+    padding-top: 100px;
+    padding-bottom: 20px;
+  }
   .glass-card { 
     padding: 10px; 
     border-radius: 15px; 
@@ -297,9 +325,71 @@ onMounted(async () => {
   .section-title { font-size: 1.5rem; }
   .btn-main { width: 100%; justify-content: center; }
   
-  .custom-table th, .custom-table td { 
-    padding: 12px 10px; 
-    white-space: nowrap;
+  .custom-table, .custom-table tbody, .custom-table tr, .custom-table td { 
+    display: block; 
+    width: 100%; 
+  }
+  .custom-table thead { display: none; }
+  .table-row {
+    margin-bottom: 20px;
+    border: 1px solid rgba(176, 141, 87, 0.2);
+    border-radius: 12px;
+    padding: 10px;
+  }
+  .custom-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 12px 10px;
+  }
+  .custom-table td::before {
+    content: attr(data-label);
+    font-weight: 800;
+    color: #8E8577;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    text-align: left;
+    margin-right: 15px;
+  }
+  .custom-table td:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 425px) {
+  .servicos-container {
+    padding-top: 90px;
+  }
+  .section-title {
+    font-size: 1.25rem;
+  }
+  .glass-card {
+    padding: 5px;
+    border-radius: 10px;
+  }
+  .custom-table th, .custom-table td {
+    padding: 8px 5px;
+    font-size: 0.85rem;
+  }
+  .action-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+  .photo-thumbnail {
+    width: 36px;
+    height: 36px;
+  }
+  .photo-more {
+    width: 36px;
+    height: 36px;
+    font-size: 0.7rem;
   }
 }
 </style>

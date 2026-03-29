@@ -20,10 +20,11 @@
             <div>
               <h2 class="section-title text-verde mb-0">Resumo Financeiro</h2>
             </div>
-            <div class="action-buttons">
-              <a href="/orcamento/" class="btn-icon view" title="Voltar para Lista">
-                <i class="bi bi-arrow-left"></i>
+            <div class="d-flex align-items-center gap-3">
+              <a href="/orcamento/" class="btn-outline-main">
+                <i class="bi bi-arrow-left me-2"></i> Voltar para Lista
               </a>
+              <div class="action-buttons">
               <a :href="`/orcamento/${orcamento.id}/edit`" class="btn-icon edit" title="Editar Orçamento">
                 <i class="bi bi-pencil"></i>
               </a>
@@ -34,6 +35,7 @@
                 </button>
               </form>
             </div>
+          </div>
           </div>
 
           <!-- Important Info -->
@@ -153,7 +155,7 @@ const confirmDelete = (e) => {
 .hero-bg {
   position: relative;
   background-color: #1b3328;
-  background-image: url('https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=2000');
+  background-image: url('/public/3.png');
   background-size: cover;
   background-position: center;
   height: 500px;
@@ -304,6 +306,26 @@ const confirmDelete = (e) => {
   cursor: pointer;
 }
 
+.btn-outline-main {
+  background: transparent;
+  color: #B08D57;
+  border: 2px solid #B08D57;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-main:hover {
+  background: #B08D57;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(176, 141, 87, 0.2);
+}
+
 .btn-icon.view { background: rgba(40, 75, 59, 0.08); color: #284B3B; border: none; }
 .btn-icon.view:hover { background: #284B3B; color: white; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(40, 75, 59, 0.2); }
 
@@ -322,5 +344,18 @@ const confirmDelete = (e) => {
   .main-content { margin-top: -60px; }
   .glass-card { padding: 25px; }
   .action-buttons { width: 100%; justify-content: flex-start; }
+}
+
+@media (max-width: 425px) {
+  .hero-bg { height: 300px; padding-top: 100px; }
+  .display-4 { font-size: 2rem; }
+  .main-content { margin-top: -80px; }
+  .glass-card { padding: 15px; }
+  .info-grid { gap: 15px; }
+  .info-item { padding: 15px; }
+  .info-value { font-size: 1rem; }
+  .valor-total-display { font-size: 2.2rem; }
+  .valor-total-display .currency { font-size: 1.2rem; }
+  .section-title { font-size: 1.5rem; }
 }
 </style>

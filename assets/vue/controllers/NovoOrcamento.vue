@@ -564,6 +564,41 @@ onMounted(() => {
   .servico-info {
     padding: 30px 20px !important;
   }
+
+  .pt-navbar {
+    padding-top: 100px !important;
+  }
+  
+  .btn-main-gold {
+     width: 100%;
+     padding: 14px 20px;
+  }
+}
+
+@media (max-width: 425px) {
+  .pt-navbar {
+    padding-top: 90px !important;
+  }
+  .display-5 {
+    font-size: 1.5rem !important;
+  }
+  .servico-info {
+    padding: 20px 15px !important;
+  }
+  .total-value {
+    font-size: 2rem !important;
+  }
+  .btn-main-gold {
+    font-size: 0.9rem;
+    padding: 12px 15px;
+  }
+  .carousel-image {
+    min-height: 250px;
+  }
+  .nav-item-btn {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
 }
 
 .custom-input-mini {

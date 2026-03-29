@@ -5,9 +5,14 @@
         <h2 class="section-title text-verde mb-1"><i class="bi bi-calculator me-2"></i>Gerenciar Orçamentos</h2>
         <p class="text-muted mb-0">Acompanhe e gerencie todas as solicitações de clientes.</p>
       </div>
-      <a :href="newPath" class="btn-main">
-        <i class="bi bi-plus-lg me-2"></i> Novo Orçamento
-      </a>
+      <div class="d-flex gap-2">
+        <a href="/" class="btn-outline-main">
+          <i class="bi bi-arrow-left me-2"></i> Voltar
+        </a>
+        <a :href="newPath" class="btn-main">
+          <i class="bi bi-plus-lg me-2"></i> Novo Orçamento
+        </a>
+      </div>
     </div>
 
     <!-- Filters & Search -->
@@ -58,18 +63,18 @@
         </thead>
         <tbody>
           <tr v-for="orcamento in filteredOrcamentos" :key="orcamento.id" class="table-row">
-            <td><span class="badge-id">#{{ orcamento.id }}</span></td>
-            <td><strong class="text-verde">{{ orcamento.titulo }}</strong></td>
-            <td class="text-muted"><small>{{ orcamento.id_servico?.nome || 'Não definido' }}</small></td>
-            <td><span class="text-muted">{{ orcamento.qtd }}</span></td>
-            <td>
+            <td data-label="ID"><span class="badge-id">#{{ orcamento.id }}</span></td>
+            <td data-label="Título"><strong class="text-verde">{{ orcamento.titulo }}</strong></td>
+            <td data-label="Serviço" class="text-muted"><small>{{ orcamento.id_servico?.nome || 'Não definido' }}</small></td>
+            <td data-label="Área (m²)"><span class="text-muted">{{ orcamento.qtd }}</span></td>
+            <td data-label="Valor Total">
               <span class="price-pill">
                 {{ formatCurrency(orcamento.valorTotal) }}
               </span>
             </td>
-            <td class="text-muted"><small>{{ formatDate(orcamento.data) }}</small></td>
-            <td class="text-end">
-              <div class="action-buttons">
+            <td data-label="Data" class="text-muted"><small>{{ formatDate(orcamento.data) }}</small></td>
+            <td data-label="Ações" class="text-end">
+              <div class="action-buttons justify-content-end">
                 <a :href="getShowPath(orcamento.id)" class="btn-icon view" title="Visualizar">
                   <i class="bi bi-eye"></i>
                 </a>
@@ -220,6 +225,26 @@ const formatDate = (dateString) => {
   box-shadow: 0 8px 20px rgba(176, 141, 87, 0.4);
 }
 
+.btn-outline-main {
+  background: transparent;
+  color: #B08D57;
+  border: 2px solid #B08D57;
+  padding: 12px 26px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-main:hover {
+  background: #B08D57;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(176, 141, 87, 0.2);
+}
+
 .glass-card {
   background: #ffffff;
   border-radius: 20px;
@@ -333,9 +358,63 @@ const formatDate = (dateString) => {
   .section-title { font-size: 1.5rem; }
   .btn-main { width: 100%; justify-content: center; }
   
-  .custom-table th, .custom-table td { 
-    padding: 12px 10px; 
-    white-space: nowrap;
+  .custom-table, .custom-table tbody, .custom-table tr, .custom-table td { 
+    display: block; 
+    width: 100%; 
+  }
+  .custom-table thead { display: none; }
+  .table-row {
+    margin-bottom: 20px;
+    border: 1px solid rgba(176, 141, 87, 0.2);
+    border-radius: 12px;
+    padding: 10px;
+  }
+  .custom-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 12px 10px;
+  }
+  .custom-table td::before {
+    content: attr(data-label);
+    font-weight: 800;
+    color: #8E8577;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    text-align: left;
+    margin-right: 15px;
+  }
+  .custom-table td:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 425px) {
+  .section-title {
+    font-size: 1.25rem;
+  }
+  .glass-card {
+    padding: 10px 5px;
+    border-radius: 10px;
+  }
+  .custom-table th, .custom-table td {
+    padding: 8px 5px;
+    font-size: 0.85rem;
+  }
+  .action-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+  .price-pill {
+    font-size: 0.85rem;
+    padding: 6px 10px;
   }
 }
 </style>

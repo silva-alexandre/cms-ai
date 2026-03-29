@@ -186,4 +186,51 @@ const handleFileChange = (e) => {
   border-radius: 20px;
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .glass-card {
+    margin-top: 100px;
+    padding: 15px !important;
+    border-radius: 15px;
+  }
+  
+  .input-group-custom {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+  }
+  
+  .input-icon, .input-prefix {
+    margin-bottom: 5px;
+    margin-right: 0;
+  }
+
+  .form-control-custom {
+    padding: 10px 0;
+  }
+}
+
+@media (max-width: 425px) {
+  .glass-card {
+    margin-top: 90px;
+    padding: 10px !important;
+  }
+  .form-control-custom {
+    font-size: 0.95rem;
+  }
+  .file-upload-wrapper {
+    padding: 20px 10px;
+  }
+  .file-upload-content h5 {
+    font-size: 1rem;
+  }
+  .existing-photo {
+    width: 60px;
+    height: 60px;
+  }
+  .btn-main {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}
 </style>

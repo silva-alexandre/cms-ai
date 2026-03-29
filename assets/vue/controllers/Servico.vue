@@ -7,10 +7,11 @@
         </h2>
         <p class="text-muted mb-0">Informações completas sobre o serviço selecionado.</p>
       </div>
-      <div class="action-buttons">
-        <a href="/servico/" class="btn-icon view" title="Voltar para Lista">
-          <i class="bi bi-arrow-left"></i>
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <a href="/servico/" class="btn-outline-main">
+          <i class="bi bi-arrow-left me-2"></i> Voltar para Lista
         </a>
+        <div class="action-buttons">
         <a :href="`/servico/${servico.id}/edit`" class="btn-icon edit" title="Editar Serviço">
           <i class="bi bi-pencil"></i>
         </a>
@@ -21,6 +22,7 @@
           </button>
         </form>
       </div>
+    </div>
     </div>
 
     <div class="row g-4">
@@ -143,6 +145,26 @@ const confirmDelete = (e) => {
   text-decoration: none;
   transition: all 0.2s;
   font-size: 1.2rem;
+}
+
+.btn-outline-main {
+  background: transparent;
+  color: #B08D57;
+  border: 2px solid #B08D57;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-main:hover {
+  background: #B08D57;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(176, 141, 87, 0.2);
 }
 
 .btn-icon.view {
@@ -296,6 +318,9 @@ const confirmDelete = (e) => {
 }
 
 @media (max-width: 768px) {
+  .servico-details-container {
+    padding: 100px 0 20px;
+  }
   .glass-card {
     padding: 20px;
   }
@@ -305,6 +330,37 @@ const confirmDelete = (e) => {
   .btn-main, .btn-outline-main {
     padding: 10px 20px;
     font-size: 0.95rem;
+  }
+  .action-buttons {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 425px) {
+  .servico-details-container {
+    padding-top: 90px;
+  }
+  .section-title {
+    font-size: 1.3rem;
+  }
+  .glass-card {
+    padding: 15px;
+  }
+  .info-item {
+    padding: 15px;
+  }
+  .info-value {
+    font-size: 1rem;
+  }
+  .price-pill {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+  .btn-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
   }
 }
 </style>
